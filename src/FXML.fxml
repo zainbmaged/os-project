@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="483.0" prefWidth="802.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="trail.FXMLController">
+   <children>
+      <Label layoutX="24.0" layoutY="173.0" prefHeight="20.0" prefWidth="184.0" text="Select Schadualing Mechanism" />
+      <ChoiceBox id="SM" fx:id="SM" layoutX="22.0" layoutY="193.0" prefHeight="26.0" prefWidth="166.0" />
+      <Label layoutX="24.0" layoutY="230.0" prefHeight="20.0" prefWidth="184.0" text="Select Schadualing Type" />
+      <ChoiceBox id="ST" fx:id="ST" layoutX="24.0" layoutY="250.0" onMouseClicked="#handle" prefHeight="26.0" prefWidth="166.0" />
+      <Button id="Submit" fx:id="Submit" layoutX="137.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#submit" text="Submit" />
+      <TableView fx:id="table" layoutX="258.0" layoutY="138.0" prefHeight="158.0" prefWidth="430.0">
+        <columns>
+          <TableColumn fx:id="process" prefWidth="75.0" text="Process" />
+          <TableColumn fx:id="arrival_time" prefWidth="100.0" text="Arrival_Time" />
+            <TableColumn fx:id="brust_time" minWidth="30.0" onEditCommit="#save_burst" prefWidth="100.0" text="Burst_Time" />
+        </columns>
+      </TableView>
+      <Button fx:id="Run" layoutX="635.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#RUN" prefHeight="26.0" prefWidth="54.0" text="Run" />
+      <TextField fx:id="QuantumTimeTextField" layoutX="22.0" layoutY="315.0" prefHeight="26.0" prefWidth="82.0" />
+      <Label fx:id="quntl" layoutX="25.0" layoutY="290.0" prefHeight="18.0" prefWidth="116.0" text="Enter time quantum" />
+      <Label layoutX="342.0" layoutY="50.0" prefHeight="20.0" prefWidth="74.0" text="Burst_time" />
+      <TextField fx:id="BurstTime" layoutX="342.0" layoutY="72.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="Priority" layoutX="427.0" layoutY="72.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label fx:id="priol" layoutX="427.0" layoutY="50.0" prefHeight="20.0" prefWidth="110.0" text="Priority" />
+      <Button fx:id="add" layoutX="568.0" layoutY="72.0" mnemonicParsing="false" onMouseClicked="#AddProcessAction" prefHeight="26.0" prefWidth="52.0" text="Set" />
+      <Label layoutX="258.0" layoutY="50.0" prefHeight="20.0" prefWidth="74.0" text="Process_ID" />
+      <TextField fx:id="processName" layoutX="258.0" layoutY="72.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label layoutX="22.0" layoutY="116.0" prefHeight="20.0" prefWidth="166.0" text="Enter Process Number" />
+      <TextField id="pfield" fx:id="p_field" layoutX="22.0" layoutY="138.0" prefHeight="26.0" prefWidth="166.0" />
+      <Label layoutX="258.0" layoutY="21.0" prefHeight="26.0" prefWidth="310.0" text="Set Process Parameters or Add new process dynamically" />
+      <Button fx:id="dynamic" layoutX="636.0" layoutY="72.0" mnemonicParsing="false" onMouseClicked="#dynamic" prefHeight="26.0" prefWidth="52.0" text="Add" />
+      <Label fx:id="AvgWaitingTimeLabel" layoutX="25.0" layoutY="375.0" prefHeight="26.0" prefWidth="166.0" text="Label" />
+      <Label fx:id="AvgTurnaroundTimeLabel" layoutX="25.0" layoutY="417.0" prefHeight="26.0" prefWidth="166.0" text="Label" />
+   </children>
+</AnchorPane>
