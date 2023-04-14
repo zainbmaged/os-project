@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 
 <AnchorPane id="AnchorPane" prefHeight="483.0" prefWidth="802.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="trail.FXMLController">
@@ -14,17 +15,17 @@
       <Label layoutX="24.0" layoutY="173.0" prefHeight="20.0" prefWidth="184.0" text="Select Schadualing Mechanism" />
       <ChoiceBox id="SM" fx:id="SM" layoutX="22.0" layoutY="193.0" prefHeight="26.0" prefWidth="166.0" />
       <Label layoutX="24.0" layoutY="230.0" prefHeight="20.0" prefWidth="184.0" text="Select Schadualing Type" />
-      <ChoiceBox id="ST" fx:id="ST" layoutX="24.0" layoutY="250.0" onMouseClicked="#handle" prefHeight="26.0" prefWidth="166.0" />
+      <ChoiceBox id="ST" fx:id="ST" layoutX="24.0" layoutY="250.0" prefHeight="26.0" prefWidth="166.0" />
       <Button id="Submit" fx:id="Submit" layoutX="137.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#submit" text="Submit" />
       <TableView fx:id="table" layoutX="258.0" layoutY="138.0" prefHeight="158.0" prefWidth="430.0">
         <columns>
           <TableColumn fx:id="process" prefWidth="75.0" text="Process" />
           <TableColumn fx:id="arrival_time" prefWidth="100.0" text="Arrival_Time" />
-            <TableColumn fx:id="brust_time" minWidth="30.0" onEditCommit="#save_burst" prefWidth="100.0" text="Burst_Time" />
+            <TableColumn fx:id="brust_time" minWidth="30.0" prefWidth="100.0" text="Burst_Time" />
         </columns>
       </TableView>
       <Button fx:id="Run" layoutX="635.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#RUN" prefHeight="26.0" prefWidth="54.0" text="Run" />
-      <TextField fx:id="QuantumTimeTextField" layoutX="22.0" layoutY="315.0" prefHeight="26.0" prefWidth="82.0" />
+      <TextField fx:id="QuantumTimeTextField" layoutX="34.0" layoutY="327.0" prefHeight="26.0" prefWidth="82.0" />
       <Label fx:id="quntl" layoutX="25.0" layoutY="290.0" prefHeight="18.0" prefWidth="116.0" text="Enter time quantum" />
       <Label layoutX="342.0" layoutY="50.0" prefHeight="20.0" prefWidth="74.0" text="Burst_time" />
       <TextField fx:id="BurstTime" layoutX="342.0" layoutY="72.0" prefHeight="26.0" prefWidth="74.0" />
@@ -37,7 +38,10 @@
       <TextField id="pfield" fx:id="p_field" layoutX="22.0" layoutY="138.0" prefHeight="26.0" prefWidth="166.0" />
       <Label layoutX="258.0" layoutY="21.0" prefHeight="26.0" prefWidth="310.0" text="Set Process Parameters or Add new process dynamically" />
       <Button fx:id="dynamic" layoutX="636.0" layoutY="72.0" mnemonicParsing="false" onMouseClicked="#dynamic" prefHeight="26.0" prefWidth="52.0" text="Add" />
-      <Label fx:id="AvgWaitingTimeLabel" layoutX="25.0" layoutY="375.0" prefHeight="26.0" prefWidth="166.0" text="Label" />
-      <Label fx:id="AvgTurnaroundTimeLabel" layoutX="25.0" layoutY="417.0" prefHeight="26.0" prefWidth="166.0" text="Label" />
+      <Label fx:id="AvgWaitingTimeLabel" layoutX="25.0" layoutY="375.0" prefHeight="26.0" prefWidth="184.0" text="Average-Waiting Time:" />
+      <Label fx:id="AvgTurnaroundTimeLabel" layoutX="25.0" layoutY="417.0" prefHeight="26.0" prefWidth="184.0" text="Average-Turnaround Time:" />
+      <HBox fx:id="hbox" layoutX="258.0" layoutY="366.0" prefHeight="49.0" prefWidth="539.0" />
+      <Label layoutX="260.0" layoutY="339.0" prefHeight="18.0" prefWidth="116.0" text="Gantt Chart:" />
+      <HBox fx:id="hbox1" layoutX="258.0" layoutY="418.0" prefHeight="50.0" prefWidth="539.0" />
    </children>
 </AnchorPane>
