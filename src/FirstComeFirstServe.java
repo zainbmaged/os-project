@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package trail;
 
 import java.text.DecimalFormat;
@@ -21,9 +25,9 @@ public class FirstComeFirstServe {
             if (timeline < i.getArrival_time()) {
                 timeline = i.getArrival_time();
             }
-            //i.setStartTime(timeline);
+            i.setStartTime(timeline);
             timeline += i.getBrust_time();
-            //i.setFinishTime(timeline);
+            i.setFinishTime(timeline);
             i.setWaitingTime(i.getStartTime() - i.getArrival_time());
             avg_waiting += i.getWaitingTime();
             i.setTurnaroundTime(i.getBrust_time() + i.getWaitingTime());
@@ -49,7 +53,7 @@ public class FirstComeFirstServe {
         List<Process> newList = new ArrayList();
 
         for (Process row : oldList) {
-            newList.add(new Process(row.getPid(), row.getArrival_time(), row.getBrust_time(), row.getBrust_time()));
+            newList.add(new Process(row.getPid(), row.getArrival_time(), row.getBrust_time()));
         }
 
         return newList;
