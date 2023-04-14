@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
+ */
 package trail;
 
 import java.net.URL;
@@ -7,6 +11,7 @@ import java.util.List;
 
 import java.util.ResourceBundle;
 import java.util.Vector;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
@@ -29,16 +34,28 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
 
 public class FXMLController implements Initializable{
     // intializing time
     int time =0;
-   
+   Timeline timeline;
     String st;
     String sm;
    
+    
+    @FXML
+    private HBox hbox;
+     @FXML
+    private HBox hbox1;
     // user choices
     @FXML
     private ChoiceBox<String> SM;
@@ -171,24 +188,14 @@ public class FXMLController implements Initializable{
 
     }
    
-    @FXML
-    void save_burst(ActionEvent event) {
-        
-         
-        
-        
-    }
-        @FXML
-     void handle(MouseEvent event) {
-        
-
-        
-    }
+    
+    
     @FXML
     void AddProcessAction(MouseEvent event) {
         ObservableList<Process> currentTableData = table.getItems();
         String currentpid = processName.getText();
 
+        
         int i =0;
         for (Process process : currentTableData) {
             if(process.getPid().equals( currentpid)) {
@@ -212,11 +219,7 @@ public class FXMLController implements Initializable{
     }
        @FXML
     void dynamic(MouseEvent event) {
-                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),e->{
-           time++;
-            
-        }));
-        timeline.play();
+        timeline.pause();
              try {
             Process r;
             if(st == "Priority-Preemptive" || st == "Priority-nonPreemptive" ){
@@ -242,8 +245,13 @@ public class FXMLController implements Initializable{
     }
     @FXML
     void RUN(MouseEvent event) {
+           timeline = new Timeline(new KeyFrame(Duration.seconds(1),e->{
+           time++;
+            
+        }));
+        timeline.play();
+        timeline.setCycleCount(Animation.INDEFINITE); // loop forever
         
-       
         if (data.isEmpty()) {
             return;
         }
@@ -252,9 +260,11 @@ public class FXMLController implements Initializable{
         } else {
             switch (st) {
                 case "FCFS":
-                    Output fcfs = FirstComeFirstServe.Calc(change(data));
-                    AvgWaitingTimeLabel.setText(fcfs.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText(fcfs.getAvg_turnaround() + "");
+                    List<Process> l =change(data);
+                    Output fcfs = FirstComeFirstServe.Calc(l);
+                    draw(l);
+                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " +fcfs.getAvg_waiting() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+fcfs.getAvg_turnaround() + "");
                     break;
                 case "SJF-nonPreemptive":
                    // Output sjf = ShortestJobFirst.Calc(change(data));
@@ -293,7 +303,7 @@ public class FXMLController implements Initializable{
             return false;
         }
     }
-    //for updating table
+    //for changing observable list into list
     private List<Process> change(ObservableList<Process> input) {
         List<Process> p = new ArrayList<>();
         input.forEach((i) -> {
@@ -310,12 +320,42 @@ public class FXMLController implements Initializable{
         }
        return process;
     }
-     ///function for adding intial processes 
-    public Process setProcess(Process process, int t){
-        process.setBrust_time(t);
-        
-        
-       return process;
-    }
+   
+    ////---------------------------------functions for live schaudaling----------//
+    public void live(List<Process> process , int time) {
     
+        for(Process p:process){
+            if(p.getArrival_time()<=time){
+                p.setBrust_time(p.getBrust_time()-1);
+                
+            }
+        }
+    }
+    public Rectangle draw_chart( Process p ) {
+    
+        
+                Rectangle rectangle = new Rectangle(p.getBrust_time()*10,40);
+                rectangle.setFill(Color.WHITE);
+                rectangle.setStroke(Color.BLACK); 
+                
+                
+          return rectangle;
+    }
+   public void draw( List<Process> process ) {
+    
+        
+                for (Process p :process){
+                        hbox.getChildren().add(draw_chart(p));
+                        Text text1 = new Text(40, 40,"P"+p.getPid());
+                        text1.setFont(Font.font("Courier", FontWeight.BOLD, 
+                        FontPosture.ITALIC, 8));
+                        Rectangle rectangle = new Rectangle(p.getBrust_time()*10-8,40);
+                        rectangle.setFill(Color.WHITESMOKE);
+                        rectangle.setStroke(null);
+                        hbox1.getChildren().addAll(text1,rectangle);
+                        
+                        
+                    }
+    }
 }
+    
