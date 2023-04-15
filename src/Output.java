@@ -4,18 +4,18 @@
  */
 package trail;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author Eng. ZAINAB
  */
 public class Output {
-     private final List<Process> processes;
+     private final ArrayList<Process> processes;
     private double avg_turnaround;
     private double avg_waiting;
 
-    public Output(List<Process> processes, double avg_waiting, double avg_turnaround) {
+    public Output(ArrayList<Process> processes, double avg_waiting, double avg_turnaround) {
         this.processes = processes;
         this.avg_waiting = avg_waiting;
         this.avg_turnaround = avg_turnaround;
@@ -26,7 +26,7 @@ public class Output {
         return "Output{" + "\nprocesses=" + processes + "\navg_waiting=" + avg_waiting + "\navg_turnaround=" + avg_turnaround + "\n}";
     }
 
-    public List<Process> getProcesses() {
+    public ArrayList<Process> getProcesses() {
         return processes;
     }
 
