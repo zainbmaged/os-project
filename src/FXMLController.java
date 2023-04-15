@@ -278,6 +278,16 @@ public class FXMLController implements Initializable{
 //                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
 //                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
                     break;
+                    case "Priority-Preemptive":
+                  //  Output srtf = ShortestRemainingTime.Calc(change(data));
+//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
+//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
+                    break;
+                    case "Priority-nonPreemptive":
+                  //  Output srtf = ShortestRemainingTime.Calc(change(data));
+//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
+//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
+                    break;
                 case "Round-Robin":
 //                    int q;
 //                    try {
