@@ -262,14 +262,16 @@ public class FXMLController implements Initializable{
                 case "FCFS":
                     List<Process> l =change(data);
                     Output fcfs = FirstComeFirstServe.Calc(l);
-                    draw(l);
+                    draw(fcfs.getProcesses());
                     AvgWaitingTimeLabel.setText("Avg Waiting Time: " +fcfs.getAvg_waiting() + "");
                     AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+fcfs.getAvg_turnaround() + "");
                     break;
                 case "SJF-nonPreemptive":
-                   // Output sjf = ShortestJobFirst.Calc(change(data));
-//                    AvgWaitingTimeLabel.setText(sjf.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(sjf.getAvg_turnaround() + "");
+                      List<Process> r =change(data);
+                      Output sjf = SJFNon.runSJFNon((ArrayList<Process>) r);
+                      draw(sjf.getProcesses());
+                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " +sjf.getAvg_waiting() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Waiting Time: " +sjf.getAvg_turnaround() + "");
                     break;
                 case "SJF-Preemptive":
                   //  Output srtf = ShortestRemainingTime.Calc(change(data));
