@@ -1,6 +1,3 @@
-import java.util.*;
-
-
 public class SJF {
     static int k[];
     //private ArrayList <Integer> []finishTime1;
@@ -29,13 +26,15 @@ public class SJF {
         }
         while (complete != n) { int j=0 ;
         for (Process f : process)
-        {//if(k[j]==minm) {f.setfinishTime1(time);}
+        {
             if ((f.getArrival_time() <= time) && (k[j] < minm) && k[j] > 0) {
+                if(time>0) process.get(shortest).setfinishTime1(time);
                 minm = k[j];
                 shortest = j;
                 check = true;
                 f.setstartTime1(time);
-            } j++;
+            } //if(k[j]==minm) {f.setfinishTime1(time);}
+             j++;
         }
             if (check == false) {
                 time++;
@@ -82,11 +81,15 @@ i=0;
             avgwaitingtime += process.get(i).getWaitingTime();
             avgturnaround += process.get(i).getTurnaroundTime();
             System.out.println(" " + process.get(i).getPid() + "\t\t"
-                    + process.get(i).getBrust_time() + "\t\t " + process.get(i).getWaitingTime()
+                    + process.get(i).getArrival_time()+ "\t\t"+ process.get(i).getBrust_time() + "\t\t " + process.get(i).getWaitingTime()
                     + "\t\t" + process.get(i).getTurnaroundTime());
         }
         avgwaitingtime=avgwaitingtime/n;
         avgturnaround=avgturnaround/n;
+        System.out.println("Average waiting time = " +
+                avgwaitingtime );
+        System.out.println("Average turn around time = " +
+               avgturnaround );
 
 
  return new Output(process,avgwaitingtime,avgturnaround);}}
