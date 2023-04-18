@@ -72,7 +72,18 @@ public class SJF {
             // Increment time
             time++;
         }
-i=0;
+
+        for (i=0;i< n;i++) {
+           for(int j=0; j<(process.get(i).getstartTime1().size());j++){
+               if((process.get(i).getstartTime1().get(j))==(process.get(i).getfinishTime1().get(j))) {
+                int u= process.get(i).getfinishTime1().get(j);
+                System.out.println(u);
+                process.get(i).removestartTime1(process.get(i).getstartTime1(),u);
+                process.get(i).removefinishTime1(process.get(i).getfinishTime1(),u);
+                System.out.println(process.get(i).getstartTime1().size()); }
+
+        }}
+            i=0;
         for ( Process x : process)
         {process.get(i).setTurnaroundTime(process.get(i).getBrust_time() +process.get(i).getWaitingTime());i++;
     }
