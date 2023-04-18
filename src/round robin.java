@@ -8,11 +8,11 @@ public class RoundRobin {
   
   
   
-  public static void sortArrival(List<Row> L) {
+  public static void sortArrival(List<Process> L) {
         Collections.sort(L, (Object o1, Object o2) -> {
-            if (((Row) o1).getArrivalTime() == ((Row) o2).getArrivalTime()) {
+            if (((Process) o1).getArrivalTime() == ((Process) o2).getArrivalTime()) {
                 return 0;
-            } else if (((Row) o1).getArrivalTime() < ((Row) o2).getArrivalTime()) {
+            } else if (((Process) o1).getArrivalTime() < ((Process) o2).getArrivalTime()) {
                 return -1;
             } else {
                 return 1;
@@ -20,11 +20,11 @@ public class RoundRobin {
         });
     }
 
-    public static void sortBrust(List<Row> L) {
+    public static void sortBrust(List<Process> L) {
         Collections.sort(L, (Object o1, Object o2) -> {
-            if (((Row) o1).getBurstTime() == ((Row) o2).getBurstTime()) {
+            if (((Process) o1).getBurstTime() == ((Process) o2).getBurstTime()) {
                 return 0;
-            } else if (((Row) o1).getBurstTime() < ((Row) o2).getBurstTime()) {
+            } else if (((Process) o1).getBurstTime() < ((Process) o2).getBurstTime()) {
                 return -1;
             } else {
                 return 1;
@@ -33,20 +33,20 @@ public class RoundRobin {
     }
 
 
-    private static List<Row> filter(List<Row> process, int arrival_time) {
-        List<Row> processes_out = new ArrayList<>();
-        process.stream().filter((i) -> (i.getArrivalTime() <= arrival_time && i.getRemainingTime() != 0)).forEachOrdered((i) -> {
+    private static List<Process> filter(List<Process> pro, int arrival_time) {
+        List<Process> processes_out = new ArrayList<>();
+        pro.stream().filter((i) -> (i.getArrivalTime() <= arrival_time && i.getRemainingTime() != 0)).forEachOrdered((i) -> {
             processes_out.add(i);
         });
         sortBrust(processes_out);
         return processes_out;
     }
 
-    private static void sortchartarrivale(List<Row> L) {
+    private static void sortchartarrivale(List<Process> L) {
         Collections.sort(L, (Object o1, Object o2) -> {
-            if (((Row) o1).getChartarrival() == ((Row) o2).getChartarrival()) {
+            if (((Process) o1).getChartarrival() == ((Process) o2).getChartarrival()) {
                 return 0;
-            } else if (((Row) o1).getChartarrival() < ((Row) o2).getChartarrival()) {
+            } else if (((Process) o1).getChartarrival() < ((Process) o2).getChartarrival()) {
                 return -1;
             } else {
                 return 1;
@@ -54,11 +54,11 @@ public class RoundRobin {
         });
     }
 
-    public static Output Calc(List<Row> input_process, int QuantumTime) {
+    public static Output Calc(List<Process> input_process, int QuantumTime) {
         int time = input_process.get(0).getArrivalTime();
-        List<Row> tempList1 = new ArrayList<>();
+        List<Process> tempList1 = new ArrayList<>();
         while (true) {
-            List<Row> tempList2 = filter(input_process, time);
+            List<Process> tempList2 = filter(input_process, time);
             if (tempList1.size() == input_process.size()) {
                 break;
             }
@@ -91,11 +91,14 @@ public class RoundRobin {
         sortArrival(tempList1);
         double avg_w = 0;
         double avg_t = 0;
-        for (Row i : tempList1) {
+        for (Process i : tempList1) {
             avg_w += i.getWaitingTime();
             avg_t += i.getTurnaroundTime();
         }
-        return new Output(tempList1, Utility.FormatDouble(avg_w / tempList1.size()), Utility.FormatDouble(avg_t / tempList1.size()));
+        return new Output(tempList1, FormatDouble(avg_w / tempList1.size()), FormatDouble(avg_t / tempList1.size()));
     }
-
+    public static double FormatDouble(double x) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.parseDouble(df.format(x));
+    }
 }
