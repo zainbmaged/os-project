@@ -201,11 +201,12 @@ public class FXMLController implements Initializable{
             if(process.getPid().equals( currentpid)) {
                 process.setBrust_time(Integer.parseInt(BurstTime.getText()));
                 
-                if(st == "Priority-Preemptive" || st == "Priority-nonPreemptive" ){
+                if(st.equals("Priority-Preemptive") || st.equals("Priority-nonPreemptive") ){
 
                 process.setPriority(Integer.parseInt(Priority.getText()));
                 }
                 data.set(i, process);
+                
                 //data.add(process);
                 table.setItems(currentTableData);
                 table.refresh();
@@ -271,33 +272,40 @@ public class FXMLController implements Initializable{
                       Output sjf = SJFNon.runSJFNon((ArrayList<Process>) r);
                       draw(sjf.getProcesses());
                     AvgWaitingTimeLabel.setText("Avg Waiting Time: " +sjf.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText("Avg Waiting Time: " +sjf.getAvg_turnaround() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+sjf.getAvg_turnaround() + "");
                     break;
                 case "SJF-Preemptive":
-                  //  Output srtf = ShortestRemainingTime.Calc(change(data));
-//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
+                    List<Process> z =change(data);
+                    Output srtf = SJF. Calc( z);
+                    draw(srtf.getProcesses());
+                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " +srtf.getAvg_waiting() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+srtf.getAvg_turnaround() + "");
                     break;
-                    case "Priority-Preemptive":
-                  //  Output srtf = ShortestRemainingTime.Calc(change(data));
-//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
+                case "Priority-Preemptive":
+                        
+                    List<Process> p =change(data);
+                    Output pp= PreemptivePriority.runPreemptivePriority((ArrayList<Process>)p);
+                    
+                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " +pp.getAvg_waiting() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+pp.getAvg_turnaround() + "");
                     break;
-                    case "Priority-nonPreemptive":
+                case "Priority-nonPreemptive":
                   //  Output srtf = ShortestRemainingTime.Calc(change(data));
 //                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
 //                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
                     break;
                 case "Round-Robin":
-//                    int q;
-//                    try {
-//                        q = Integer.parseInt(QuantumTimeTextField.getText());
-//                    } catch (NumberFormatException e) {
-//                        break;
-//                    }
-                   // Output rr = RoundRobin.Calc(change(data), q);
-//                    AvgWaitingTimeLabel.setText(rr.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(rr.getAvg_turnaround() + "");
+                    int q;
+                    try {
+                        q = Integer.parseInt(QuantumTimeTextField.getText());
+                        
+                    } catch (NumberFormatException e) {
+                        break;
+                    }
+                    Output rr = RoundRobin.Calc(change(data), q);
+                    draw(rr.getProcesses());
+                    AvgWaitingTimeLabel.setText("Avg Waiting Time: "  +rr.getAvg_waiting() + "");
+                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  "+rr.getAvg_turnaround() + "");
                     break;
                 default:
                     System.out.println("ERROR");
