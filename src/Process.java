@@ -4,6 +4,8 @@
  */
 package trail;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Eng. ZAINAB
@@ -17,7 +19,10 @@ public class Process {
     private int turnaroundTime;
     private int startTime;
     private int finishTime;
-    
+    private ArrayList<Integer> finishTime1;
+     private int RemainingTime;
+     private   ArrayList<Integer> startTime1; 
+     private int Chartarrival;
     public Process(){
         this.pid="";
         this.brust_time=0;
@@ -25,6 +30,26 @@ public class Process {
         this.arrival_time=0;
     }
 
+     private Process(String processName, int arrivalTime, int burstTime, int startTime, int finishTime, int priorityLevel, int waitingTime, int turnaroundTime) {
+        this.pid = processName;
+        this.arrival_time = arrivalTime;
+        this.brust_time = burstTime;
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.Priority = priorityLevel;
+        this.waitingTime = waitingTime;
+        this.turnaroundTime = turnaroundTime;
+        this.Chartarrival = arrivalTime;
+        this.RemainingTime = burstTime;
+    }
+
+    public Process(String processName, int arrivalTime, int burstTime, int priorityLevel) {
+        this(processName, arrivalTime, burstTime, 0, 0, priorityLevel, 0, 0);
+    }
+
+    public Process(String processName, int arrivalTime, int burstTime) {
+        this(processName, arrivalTime, burstTime, 0, 0, 0, 0, 0);
+    }
     public int getWaitingTime() {
         return waitingTime;
     }
@@ -70,21 +95,7 @@ public class Process {
     public void setArrival_time(int arrival_time) {
         this.arrival_time = arrival_time;
     }
-    //constructor without priority
-    public Process(String pi,int a,int bt){
-        this.pid=pi;
-        this.brust_time=bt;
-        this.arrival_time=a;
-        
-    }
-
-    //constructor with priority
-    public Process(String pi,int bt,int a, int p){
-        this.pid=pi;
-        this.brust_time=bt;
-        this.arrival_time=a;
-        this.Priority=p;
-    }
+   
 
     public String getPid() {
         return pid;
@@ -109,5 +120,36 @@ public class Process {
     public void setPriority(int Priority) {
         this.Priority = Priority;
     }
-   
+   public int getRemainingBurstTime() {
+        return RemainingTime;
+    }
+
+    public void setRemainingBurstTime(int RemainingTime) {
+        this.RemainingTime = RemainingTime;
+    }
+    public void setfinishTime1(int a) {
+        finishTime1=new ArrayList<Integer>();
+        finishTime1.add(a);
+    }
+    public ArrayList<Integer> getfinishTime1() {
+
+        return finishTime1;
+    }
+    public ArrayList<Integer> getstartTime1() {
+
+        return startTime1;
+    }
+    public void setstartTime1(int a) {
+        startTime1=new ArrayList<Integer>();
+        startTime1.add(a);
+
+    }
+    public int getChartarrival() {
+        return Chartarrival;
+    }
+
+    public void setChartarrival(int Chartarrival) {
+        this.Chartarrival = Chartarrival;
+    }
+
 }
