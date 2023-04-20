@@ -1,8 +1,6 @@
 public class SJF {
     static int k[];
-    //private ArrayList <Integer> []finishTime1;
-    //private  ArrayList<Integer> []startTime1;
-    static int count=0;
+
     public static Output set(List<Process> processes) {
         int n = processes.size();
         k = new int[n];
@@ -10,11 +8,12 @@ public class SJF {
         //int st=0,total = 0;
         float avgwaitingtime = 0;
         float avgturnaround = 0;
-        int complete = 0, time = 0, minm = Integer.MAX_VALUE;
+        int complete = 0, time = 0;
         int shortest = 0, finish_time;
         boolean check = false;
 
         ArrayList<Process> process = new ArrayList();
+        ArrayList<Process> trial = new ArrayList();
         for (Process x : processes) {
             process.add(new Process(x.getPid(), x.getArrival_time(), x.getBrust_time()));
         }
@@ -23,31 +22,45 @@ public class SJF {
         for (Process v : process) {
             k[i] = v.getBrust_time();
             i++;
-        }
-        while (complete != n) { int j=0 ;
-        for (Process f : process)
-        {
-            if ((f.getArrival_time() <= time) && (k[j] < minm) && k[j] > 0) {
-                if(time>0) process.get(shortest).setfinishTime1(time);
+        }int minm = k[0];int j;
+        while (complete != n) {  System.out.println("Reem");
+            j = 0;
+      
+             for (Process f : process) {
+
+
+            if ((time == 0) && (k[j] < minm) && (k[j] > 0) && (f.getArrival_time() <= time)) {
+                trial.add(new Process(f.getPid(), time));trial.get(trial.size()-1).setStartTime(time);
                 minm = k[j];
                 shortest = j;
                 check = true;
-                f.setstartTime1(time);
-            } //if(k[j]==minm) {f.setfinishTime1(time);}
-             j++;
-        }
-            if (check == false) {
-                time++;
-                continue;
+
+            } //if((time==0) && (k[j]==minm) && (k[j] > 0)){trial.add(new Process(f.getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+            if ((f.getArrival_time() <= time) && (k[j] < minm) && (k[j] > 0) && (time>0)) {
+
+                    trial.get(trial.size()-1).setFinishTime(time);
+                    trial.add(new Process(f.getPid(), time));
+                    trial.get(trial.size()-1).setStartTime(time);
+                 minm = k[j];
+                shortest = j;
+                check = true;
             }
 
+
+            j++;
+            }
+            if (!check) {if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
+            {trial.add(new Process(process.get(shortest).getPid(),time)) ; trial.get(trial.size()-1).setStartTime(time);
+           }}
+
             // Reduce remaining time by one
-           k[shortest]--;
+            k[shortest]--;
 
             // Update minimum
             minm = k[shortest];
-            if (minm == 0)
-            {minm = Integer.MAX_VALUE;}
+            if (minm == 0) {
+                minm = k[0];
+            }
 
             // If a process gets completely
             // executed
@@ -59,30 +72,23 @@ public class SJF {
 
                 // Find finish time of current
                 // process
-                finish_time = time + 1;
 
-                process.get(shortest).setfinishTime1(finish_time);
+                finish_time = time + 1;
+                trial.get(trial.size() - 1).setFinishTime(finish_time);
+                //process.get(shortest).setFinishTime(finish_time);
                 // Calculate waiting time
 
                 process.get(shortest).setWaitingTime(finish_time - process.get(shortest).getBrust_time() - process.get(shortest).getArrival_time());
 
-                if (process.get(shortest).getWaitingTime() < 0)
-                { process.get(shortest).setWaitingTime(0);}
+                if (process.get(shortest).getWaitingTime() < 0) {
+                    process.get(shortest).setWaitingTime(0);
+                }
             }
             // Increment time
             time++;
         }
 
-        for (i=0;i< n;i++) {
-           for(int j=0; j<(process.get(i).getstartTime1().size());j++){
-               if((process.get(i).getstartTime1().get(j))==(process.get(i).getfinishTime1().get(j))) {
-                int u= process.get(i).getfinishTime1().get(j);
-                System.out.println(u);
-                process.get(i).removestartTime1(process.get(i).getstartTime1(),u);
-                process.get(i).removefinishTime1(process.get(i).getfinishTime1(),u);
-                System.out.println(process.get(i).getstartTime1().size()); }
 
-        }}
             i=0;
         for ( Process x : process)
         {process.get(i).setTurnaroundTime(process.get(i).getBrust_time() +process.get(i).getWaitingTime());i++;
@@ -103,4 +109,4 @@ public class SJF {
                avgturnaround );
 
 
- return new Output(process,avgwaitingtime,avgturnaround);}}
+ return new Output(trial,avgwaitingtime,avgturnaround);}}
