@@ -5,6 +5,7 @@ public class SJF {
         int n = processes.size();
         k = new int[n];
         int i = 0;
+        //int st=0,total = 0;
         float avgwaitingtime = 0;
         float avgturnaround = 0;
         int complete = 0, time = 0;
@@ -42,14 +43,22 @@ public class SJF {
             if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
               { if (trial.size()==0)
               {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
-           else {trial.get(trial.size()-1).setFinishTime(time);trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+           else {trial.get(trial.size()-1).setFinishTime(time); int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
+               trial.get(trial.size()-1).setBrust_time(cul);
+               trial.add(new Process(process.get(shortest).getPid(), time));
+               trial.get(trial.size()-1).setStartTime(time);
+
+           }
 
               }
 
             if (!check) {if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
                 if (trial.size()==0)
                 {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
-                else {trial.get(trial.size()-1).setFinishTime(time);trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+                else {trial.get(trial.size()-1).setFinishTime(time);
+                    int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
+                    trial.get(trial.size()-1).setBrust_time(cul);
+                    trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
 
             }
 
@@ -73,16 +82,17 @@ public class SJF {
 
                 finish_time = time + 1;
                 trial.get(trial.size() - 1).setFinishTime(finish_time);
-            
+
                 process.get(shortest).setWaitingTime(finish_time - process.get(shortest).getBrust_time() - process.get(shortest).getArrival_time());
 
                 if (process.get(shortest).getWaitingTime() < 0) {
                     process.get(shortest).setWaitingTime(0);
-                } 
+                }
             }
             // Increment time
             time++;
-        }
+        } int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
+        trial.get(trial.size()-1).setBrust_time(cul);
 
 
             i=0;
