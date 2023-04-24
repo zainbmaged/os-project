@@ -5,7 +5,6 @@ public class SJF {
         int n = processes.size();
         k = new int[n];
         int i = 0;
-        //int st=0,total = 0;
         float avgwaitingtime = 0;
         float avgturnaround = 0;
         int complete = 0, time = 0;
@@ -22,36 +21,37 @@ public class SJF {
         for (Process v : process) {
             k[i] = v.getBrust_time();
             i++;
-        }int minm = k[0];int j;
+        }int minm = 10000;
+        int j;
         while (complete != n) {  System.out.println("Reem");
             j = 0;
-      
+
              for (Process f : process) {
 
 
-            if ((time == 0) && (k[j] < minm) && (k[j] > 0) && (f.getArrival_time() <= time)) {
-                trial.add(new Process(f.getPid(), time));trial.get(trial.size()-1).setStartTime(time);
-                minm = k[j];
-                shortest = j;
-                check = true;
 
-            } //if((time==0) && (k[j]==minm) && (k[j] > 0)){trial.add(new Process(f.getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
-            if ((f.getArrival_time() <= time) && (k[j] < minm) && (k[j] > 0) && (time>0)) {
+                 if ((f.getArrival_time() <= time) && (k[j] < minm) && (k[j] > 0) ) {
 
-                    trial.get(trial.size()-1).setFinishTime(time);
-                    trial.add(new Process(f.getPid(), time));
-                    trial.get(trial.size()-1).setStartTime(time);
-                 minm = k[j];
-                shortest = j;
-                check = true;
-            }
-
+                     minm = k[j];
+                     shortest = j;
+                     check = true;
+                 }
 
             j++;
             }
+            if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
+              { if (trial.size()==0)
+              {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+           else {trial.get(trial.size()-1).setFinishTime(time);trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+
+              }
+
             if (!check) {if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
-            {trial.add(new Process(process.get(shortest).getPid(),time)) ; trial.get(trial.size()-1).setStartTime(time);
-           }}
+                if (trial.size()==0)
+                {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+                else {trial.get(trial.size()-1).setFinishTime(time);trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+
+            }
 
             // Reduce remaining time by one
             k[shortest]--;
@@ -59,7 +59,7 @@ public class SJF {
             // Update minimum
             minm = k[shortest];
             if (minm == 0) {
-                minm = k[0];
+                minm = 10000;
             }
 
             // If a process gets completely
@@ -70,19 +70,15 @@ public class SJF {
                 complete++;
                 check = false;
 
-                // Find finish time of current
-                // process
 
                 finish_time = time + 1;
                 trial.get(trial.size() - 1).setFinishTime(finish_time);
-                //process.get(shortest).setFinishTime(finish_time);
-                // Calculate waiting time
-
+            
                 process.get(shortest).setWaitingTime(finish_time - process.get(shortest).getBrust_time() - process.get(shortest).getArrival_time());
 
                 if (process.get(shortest).getWaitingTime() < 0) {
                     process.get(shortest).setWaitingTime(0);
-                }
+                } 
             }
             // Increment time
             time++;
