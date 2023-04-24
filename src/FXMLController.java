@@ -53,7 +53,7 @@ public class FXMLController implements Initializable {
 
     // intializing time
     int time = 0;
-    int i = 0;
+    int m = 0;
     List<Process> l;
     Output out;
     int aw = 0;
@@ -184,7 +184,7 @@ public class FXMLController implements Initializable {
 
         }));
 //        timeline.play();
-     timeline.setCycleCount(Animation.INDEFINITE); // loop forever
+        timeline.setCycleCount(Animation.INDEFINITE); // loop forever
 
         SM.getItems().addAll("live schadualing", "Immediatly run all");
         SM.setValue("live schadualing");
@@ -228,7 +228,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     void dynamic(MouseEvent event) {
-        if (sm.equals("live schadualing")) {
+        if (sm.equals("live schadualing") && timeline.getStatus().equals(RUNNING) ) {
             timeline.pause();
 
             try {
@@ -251,7 +251,9 @@ public class FXMLController implements Initializable {
                 BurstTime.setText("");
                 table.setItems(data);
             } catch (NumberFormatException e) {
-               System.out.println("Exception in FXMLController -> AddProcessAction() : " + e);
+                System.out.println("Exception in FXMLController -> AddProcessAction() : " + e);
+            } catch (RuntimeException r) {
+                System.out.println("Exception in FXMLController -> AddProcessAction() : " + r);
             }
         }
     }
@@ -270,36 +272,38 @@ public class FXMLController implements Initializable {
                 case "FCFS":
                     l = change(data);
                     out = FirstComeFirstServe.Calc(l);
-                    
+
                     if (sm.equals("live schadualing")) {
 
-                        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(out.getProcesses().get(i).getBrust_time()), e -> {
-                            
-                            draw_live(out.getProcesses().get(i));
-                            i++;
-                            System.out.println(i+"");
-                            
+                        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(out.getProcesses().get(m).getBrust_time()), e -> {
+                            try {
+                                draw_live(out.getProcesses().get(m));
+                            } catch (IndexOutOfBoundsException i) {
+                                m = out.getProcesses().size() - 1;
+                                System.out.println("Exception in FXMLController -> index : " + i);
+                            }
+                            if (m < out.getProcesses().size()) {
+                                m++;
+                            }
 
                         }));
                         tim.setCycleCount(out.getProcesses().size());
                         tim.play();
                         if (timeline.getStatus().equals(PAUSED)) {
                             tim.pause();
-                           
+
                         }
                         if (timeline.getStatus().equals(RUNNING)) {
                             tim.play();
                             tim.setCycleCount(out.getProcesses().size());
                         }
 
-                        
-                        
-                        tim.setOnFinished(e->{
+                        tim.setOnFinished(e -> {
                             AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
-                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");});
-                        
+                            AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                        });
 
-                    } else {
+                    } else {//for immediate running
                         draw(out.getProcesses());
                         AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
                         AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
@@ -308,9 +312,13 @@ public class FXMLController implements Initializable {
                 case "SJF-nonPreemptive":
                     List<Process> r = change(data);
                     Output sjf = SJFNon.runSJFNon((ArrayList<Process>) r);
-                    draw(sjf.getProcesses());
-                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " + sjf.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + sjf.getAvg_turnaround() + "");
+                    if (sm.equals("live schadualing")) {
+
+                    } else {
+                        draw(sjf.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + sjf.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + sjf.getAvg_turnaround() + "");
+                    }
                     break;
                 case "SJF-Preemptive":
                     List<Process> z = change(data);
