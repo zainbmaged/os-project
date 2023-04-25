@@ -44,7 +44,7 @@ public class SJF {
               { if (trial.size()==0)
               {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
            else {trial.get(trial.size()-1).setFinishTime(time); int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
-               trial.get(trial.size()-1).setBrust_time(cul);
+               trial.get(trial.size()-1).setBrust_time(cul);trial.get(trial.size()-1).setRemainingBurstTime(cul);
                trial.add(new Process(process.get(shortest).getPid(), time));
                trial.get(trial.size()-1).setStartTime(time);
 
@@ -58,6 +58,7 @@ public class SJF {
                 else {trial.get(trial.size()-1).setFinishTime(time);
                     int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
                     trial.get(trial.size()-1).setBrust_time(cul);
+                    trial.get(trial.size()-1).setRemainingBurstTime(cul);
                     trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
 
             }
@@ -92,7 +93,7 @@ public class SJF {
             // Increment time
             time++;
         } int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
-        trial.get(trial.size()-1).setBrust_time(cul);
+        trial.get(trial.size()-1).setBrust_time(cul);trial.get(trial.size()-1).setRemainingBurstTime(cul);
 
 
             i=0;
