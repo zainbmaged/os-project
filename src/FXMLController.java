@@ -6,6 +6,7 @@ package trail;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -108,6 +109,8 @@ public class FXMLController implements Initializable {
 
     @FXML
     private TableColumn<Process, Integer> brust_time;
+    @FXML
+    private TableColumn<Process, Integer> remaining;
 
     private TableColumn<Process, Integer> p_col3 = new TableColumn("Priority");
 
@@ -154,7 +157,8 @@ public class FXMLController implements Initializable {
         // process burst time
 
         brust_time.setCellValueFactory(new PropertyValueFactory("brust_time"));
-        brust_time.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+        remaining.setCellValueFactory(new PropertyValueFactory("RemainingBurstTime"));
 
         if (st == "Priority-Preemptive" || st == "Priority-nonPreemptive") {
             // process prioroty
@@ -171,7 +175,7 @@ public class FXMLController implements Initializable {
         if (is_int(p_field.getText())) {
             int n = Integer.parseInt(p_field.getText());
 
-            table.setItems(getProcess(n));
+            getProcess(n);
 
         }
     }
@@ -183,6 +187,31 @@ public class FXMLController implements Initializable {
             time++;
 
         }));
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(2), e -> {
+            try {
+                if (m < out.getProcesses().size() && out.getProcesses().get(m).getBrust_time() == out.getProcesses().get(m).getRemainingBurstTime()) {
+
+                    out.getProcesses().set(m, draw_live(out.getProcesses().get(m)));
+                }
+
+            } catch (IndexOutOfBoundsException i) {
+            }
+
+            if (m < out.getProcesses().size() && out.getProcesses().get(m).getRemainingBurstTime() == 0) {
+                m++;
+
+            }
+            System.out.println(m + "");
+            if (m == out.getProcesses().size()) {
+                AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                timeline.stop();
+
+            }
+
+        }));
+
 //        timeline.play();
         timeline.setCycleCount(Animation.INDEFINITE); // loop forever
 
@@ -207,6 +236,7 @@ public class FXMLController implements Initializable {
         for (Process process : currentTableData) {
             if (process.getPid().equals(currentpid)) {
                 process.setBrust_time(Integer.parseInt(BurstTime.getText()));
+                process.setRemainingBurstTime(Integer.parseInt(BurstTime.getText()));
 
                 if (st.equals("Priority-Preemptive") || st.equals("Priority-nonPreemptive")) {
 
@@ -228,7 +258,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     void dynamic(MouseEvent event) {
-        if (sm.equals("live schadualing") && timeline.getStatus().equals(RUNNING) ) {
+        if (sm.equals("live schadualing") && timeline.getStatus().equals(RUNNING)) {
             timeline.pause();
 
             try {
@@ -250,18 +280,20 @@ public class FXMLController implements Initializable {
 
                 BurstTime.setText("");
                 table.setItems(data);
+
             } catch (NumberFormatException e) {
                 System.out.println("Exception in FXMLController -> AddProcessAction() : " + e);
             } catch (RuntimeException r) {
                 System.out.println("Exception in FXMLController -> AddProcessAction() : " + r);
             }
+            m++;
         }
     }
 
     @FXML
     void RUN(MouseEvent event) {
-        timeline.play();
 
+        timeline.play();
         if (data.isEmpty()) {
             return;
         }
@@ -269,18 +301,49 @@ public class FXMLController implements Initializable {
             System.out.println("ERROR");
         } else {
             switch (st) {
-                case "FCFS":
+                case "FCFS" -> {
                     l = change(data);
                     out = FirstComeFirstServe.Calc(l);
 
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
+                        draw(out.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                    }
+                }
+                case "SJF-nonPreemptive" -> {
+                    l = change(data);
+                    out = SJFNon.runSJFNon((ArrayList<Process>) l);
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
+                        draw(out.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                    }
+                }
+                case "SJF-Preemptive" -> {
+                    l = change(data);
+                    out = SJF.set(l);
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
+                        draw(out.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                    }
+                }
+                case "Priority-Preemptive" -> {
+                    l = change(data);
+                    out = PreemptivePriority.run((ArrayList<Process>) l);
                     if (sm.equals("live schadualing")) {
-
-                        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(out.getProcesses().get(m).getBrust_time()), e -> {
+                        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(out.getProcesses().get(m).getBrust_time() + out.getProcesses().get(m).getArrival_time()), e -> {
                             try {
+
                                 draw_live(out.getProcesses().get(m));
+
                             } catch (IndexOutOfBoundsException i) {
-                                m = out.getProcesses().size() - 1;
-                                System.out.println("Exception in FXMLController -> index : " + i);
+                                //m = out.getProcesses().size() - 1;
+                                // System.out.println("Exception in FXMLController -> index : " + i);
                             }
                             if (m < out.getProcesses().size()) {
                                 m++;
@@ -289,7 +352,9 @@ public class FXMLController implements Initializable {
                         }));
                         tim.setCycleCount(out.getProcesses().size());
                         tim.play();
+                        tim.setRate(1);
                         if (timeline.getStatus().equals(PAUSED)) {
+                            m--;
                             tim.pause();
 
                         }
@@ -302,46 +367,23 @@ public class FXMLController implements Initializable {
                             AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
                             AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
                         });
-
-                    } else {//for immediate running
+                    } else {
                         draw(out.getProcesses());
                         AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
                         AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
                     }
-                    break;
-                case "SJF-nonPreemptive":
-                    List<Process> r = change(data);
-                    Output sjf = SJFNon.runSJFNon((ArrayList<Process>) r);
-                    if (sm.equals("live schadualing")) {
-
-                    } else {
-                        draw(sjf.getProcesses());
-                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + sjf.getAvg_waiting() + "");
-                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + sjf.getAvg_turnaround() + "");
+                }
+                case "Priority-nonPreemptive" -> {
+                    l = change(data);
+                    out = NonPreemptivePriority.run((ArrayList<Process>) l);
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
+                        draw(out.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
                     }
-                    break;
-                case "SJF-Preemptive":
-                    List<Process> z = change(data);
-                    Output srtf = SJF.set(z);
-                    draw(srtf.getProcesses());
-                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " + srtf.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + srtf.getAvg_turnaround() + "");
-                    break;
-                case "Priority-Preemptive":
-
-                    List<Process> p = change(data);
-                    Output pp = PreemptivePriority.run((ArrayList<Process>) p);
-                    draw(pp.getProcesses());
-
-                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " + pp.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + pp.getAvg_turnaround() + "");
-                    break;
-                case "Priority-nonPreemptive":
-                    //  Output srtf = ShortestRemainingTime.Calc(change(data));
-//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
-                    break;
-                case "Round-Robin":
+                }
+                case "Round-Robin" -> {
                     int q;
                     try {
                         q = Integer.parseInt(QuantumTimeTextField.getText());
@@ -353,11 +395,13 @@ public class FXMLController implements Initializable {
                     draw(rr.getProcesses());
                     AvgWaitingTimeLabel.setText("Avg Waiting Time: " + rr.getAvg_waiting() + "");
                     AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + rr.getAvg_turnaround() + "");
-                    break;
-                default:
+                }
+                default ->
                     System.out.println("ERROR");
-                    break;
             }
+            //  Output srtf = ShortestRemainingTime.Calc(change(data));
+//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
+//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
         }
 
     }
@@ -382,13 +426,14 @@ public class FXMLController implements Initializable {
     }
 
     ///function for adding intial processes 
-    public ObservableList<Process> getProcess(int n) {
+    public void getProcess(int n) {
         ObservableList<Process> process = FXCollections.observableArrayList();
         for (int i = 0; i < n; i++) {
-            process.add(new Process("" + (i + 1), 0));
-            data.add(new Process("" + (i + 1), 0));
+            process.add(new Process("" + (i + 1)));
+            data.add(new Process("" + (i + 1)));
+            table.setItems(data);
         }
-        return process;
+        // return process;
     }
 
     ////---------------------------------functions for live schaudaling----------//
@@ -436,31 +481,35 @@ public class FXMLController implements Initializable {
         }
     }
 
-    public void draw_live(Process p) {
+    public Process draw_live(Process p) {
 
         Rectangle rec = draw_chart_live(p, 0);
-        int cycle = p.getBrust_time();
+        //int cycle = p.getBrust_time();
+        if (sm.equals("live schadualing")) {
 
-        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), e -> {
+                if (p.getRemainingBurstTime() > 0) {
+                    rec.setWidth(rec.getWidth() + 10);
+                    p.setRemainingBurstTime(p.getRemainingBurstTime() - 1);
+                    data.set(Integer.parseInt(p.getPid()) - 1, p);
+                    table.setItems(data);
+                }
 
-            rec.setWidth(rec.getWidth() + 10);
-//            p.setBrust_time(p.getBrust_time() - 1);
-//            data.set(Integer.parseInt(p.getPid()) - 1, p);
-//            table.setItems(data);
+            }));
 
-        }));
-
-        tim.setCycleCount(cycle);
-        tim.play();
-
-        hbox.getChildren().add(rec);
-        Text text1 = new Text(40, 40, "P" + p.getPid());
-        text1.setFont(Font.font("Courier", FontWeight.BOLD,
-                FontPosture.ITALIC, 8));
-        Rectangle rectangle = new Rectangle(p.getBrust_time() * 10 - 8, 40);
-        rectangle.setFill(Color.WHITESMOKE);
-        rectangle.setStroke(null);
-        hbox1.getChildren().addAll(text1, rectangle);
+            hbox.getChildren().add(rec);
+            Text text1 = new Text(40, 40, "P" + p.getPid());
+            text1.setFont(Font.font("Courier", FontWeight.BOLD,
+                    FontPosture.ITALIC, 8));
+            Rectangle rectangle = new Rectangle(p.getBrust_time() * 10 - 8, 40);
+            rectangle.setFill(Color.WHITESMOKE);
+            rectangle.setStroke(null);
+            hbox1.getChildren().addAll(text1, rectangle);
+            return p;
+        } else {
+            m++;
+            return p;
+        }
 
     }
 
