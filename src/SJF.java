@@ -5,7 +5,6 @@ public class SJF {
         int n = processes.size();
         k = new int[n];
         int i = 0;
-        //int st=0,total = 0;
         float avgwaitingtime = 0;
         float avgturnaround = 0;
         int complete = 0, time = 0;
@@ -42,10 +41,13 @@ public class SJF {
             }
             if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
               { if (trial.size()==0)
-              {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+              {trial.add(new Process(process.get(shortest).getPid(), process.get(shortest).getArrival_time()));
+                  trial.get(trial.size()-1).setStartTime(time);}
            else {trial.get(trial.size()-1).setFinishTime(time); int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
-               trial.get(trial.size()-1).setBrust_time(cul);trial.get(trial.size()-1).setRemainingBurstTime(cul);
-               trial.add(new Process(process.get(shortest).getPid(), time));
+               trial.get(trial.size()-1).setBrust_time(cul);
+               trial.get(trial.size()-1).setRemainingBurstTime(cul);
+                  //trial.get(trial.size()-1).setArrival_time(trial);
+               trial.add(new Process(process.get(shortest).getPid(), process.get(shortest).getArrival_time()));
                trial.get(trial.size()-1).setStartTime(time);
 
            }
@@ -54,12 +56,12 @@ public class SJF {
 
             if (!check) {if (trial.size() == 0 || !Objects.equals(trial.get(trial.size() - 1).getPid(), process.get(shortest).getPid()))
                 if (trial.size()==0)
-                {trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+                {trial.add(new Process(process.get(shortest).getPid(), process.get(shortest).getArrival_time()));trial.get(trial.size()-1).setStartTime(time);}
                 else {trial.get(trial.size()-1).setFinishTime(time);
                     int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
                     trial.get(trial.size()-1).setBrust_time(cul);
                     trial.get(trial.size()-1).setRemainingBurstTime(cul);
-                    trial.add(new Process(process.get(shortest).getPid(), time));trial.get(trial.size()-1).setStartTime(time);}
+                    trial.add(new Process(process.get(shortest).getPid(), process.get(shortest).getArrival_time()));trial.get(trial.size()-1).setStartTime(time);}
 
             }
 
