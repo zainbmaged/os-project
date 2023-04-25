@@ -94,7 +94,8 @@ public class SJF {
             // Increment time
             time++;
         } int cul = trial.get(trial.size()-1).getFinishTime()-trial.get(trial.size()-1).getStartTime();
-        trial.get(trial.size()-1).setBrust_time(cul);trial.get(trial.size()-1).setRemainingBurstTime(cul);
+        //trial.get(trial.size()-1).setBrust_time(cul);
+        trial.get(trial.size()-1).setRemainingBurstTime(cul);
 
 
             i=0;
