@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 
 
 public class RoundRobin {
-    public static Output calc(ArrayList<Process> processes,into QuantumTime ) {
+    public static Output calc(ArrayList<Process> processes,int QuantumTime ) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         int currentTime = 0;
         Queue<Process> queue = new Queue<>(Comparator.comparingInt(Process::getArrival_time() ));
