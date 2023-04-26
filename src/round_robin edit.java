@@ -71,7 +71,8 @@ public class RoundRobin {
                 if (tempList2.get(0).getRemainingBurstTime() >= QuantumTime) {
                     time += QuantumTime;
                     Finallist.add(tempList2.get(0));
-                    Finallist.get(0).setBrust_time(QuantumTime);
+                    Finallist.get(0).setRemainingBurstTime(QuantumTime);
+                 // Finallist.get(0).setBrust_time(QuantumTime);
                     tempList2.get(0).setRemainingBurstTime(tempList2.get(0).getRemainingBurstTime() - QuantumTime);
                     tempList2.get(0).setChartarrival(time);
 
@@ -84,7 +85,8 @@ public class RoundRobin {
                     int remain_time=tempList2.get(0).getRemainingBurstTime();
                     tempList2.get(0).setRemainingBurstTime(0);
                     Finallist.add(tempList2.get(0));
-                    Finallist.get(0).setBrust_time(remain_time);
+                    Finallist.get(0).setRemainingBurstTime(remain_time);
+                    //Finallist.get(0).setBrust_time(remain_time);
                     if (tempList2.get(0).getRemainingBurstTime() == 0) {
                         tempList2.get(0).setFinishTime(time);
                         tempList1.add(tempList2.get(0));
