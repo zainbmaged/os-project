@@ -86,8 +86,8 @@ public class RoundRobin {
                     Finallist.add(tempList2.get(0));
                     Finallist.get(0).setBrust_time(remain_time);
                     if (tempList2.get(0).getRemainingBurstTime() == 0) {
-                    tempList2.get(0).setFinishTime(time);
-                    tempList1.add(tempList2.get(0));
+                        tempList2.get(0).setFinishTime(time);
+                        tempList1.add(tempList2.get(0));
                     }
                 }
             }
