@@ -50,6 +50,8 @@ public class NonPreemptivePriority {
     // Calculate average waiting time and average turnaround time
     double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
     double avgTurnaroundTime = turnaroundTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+    //double avgWaitingTime = (double) totalWaitingTime / processes.size();
+    //double avgTurnaroundTime = (double) totalTurnaroundTime / processes.size();  
 
     return new Output(executedProcesses, avgWaitingTime, avgTurnaroundTime);
 }
