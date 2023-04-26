@@ -55,7 +55,7 @@ public class RoundRobin {
     }
 
     public static Output Calc(List<Process> input_process, int QuantumTime) {
-        int time = input_process.get(0).getArrival_time();
+        int time = input_process.getArrival_time();
         List<Process> tempList1 = new ArrayList<>();
         List<Process> FinalList = new ArrayList<>();
         
@@ -68,28 +68,28 @@ public class RoundRobin {
                 time++;
             } else {
                 sortchartarrivale(tempList2);
-                if (tempList2.get(tempList2.size()-1).getRemainingBurstTime() >= QuantumTime) {
+                if (tempList2.getRemainingBurstTime() >= QuantumTime) {
                     time += QuantumTime;
                     Finallist.add(tempList2.get(tempList2.size()-1 );
-                    Finallist.get(Finallist.size()-1).setRemainingBurstTime(QuantumTime);
-                    Finallist.get(Finallist.size()-1 ).setBrust_time(QuantumTime);
-                    tempList2.get(tempList2.size()-1).setRemainingBurstTime(tempList2.get(0).getRemainingBurstTime() - QuantumTime);
-                    tempList2.get(tempList2.size()-1).setChartarrival(time);
+                    Finallist.setRemainingBurstTime(QuantumTime);
+                    Finallist.setBrust_time(QuantumTime);
+                    tempList2.setRemainingBurstTime(tempList2.get(0).getRemainingBurstTime() - QuantumTime);
+                    tempList2.setChartarrival(time);
 
-                    if (tempList2.get(tempList2.size()-1).getRemainingBurstTime() == 0) {
-                        tempList2.get(tempList2.size()-1).setFinishTime(time);
-                        tempList1.add(tempList2.get(tempList2.size()-1));
+                    if (tempList2.getRemainingBurstTime() == 0) {
+                        tempList2.setFinishTime(time);
+                        tempList1.add(tempList2);
                     }
                 } else {
-                    time += tempList2.get(tempList2.size()-1).getRemainingBurstTime();
-                    int remain_time=tempList2.get(tempList2.size()-1).getRemainingBurstTime();
-                    tempList2.get(tempList2.size()-1).setRemainingBurstTime(0);
-                    Finallist.add(tempList2.get(tempList2.size()-1));
-                    Finallist.get(Finallist.size()-1).setRemainingBurstTime(remain_time);
-                    Finallist.get(Finallist.size()-1).setBrust_time(remain_time);
-                    if (tempList2.get(tempList2.size()-1).getRemainingBurstTime() == 0) {
-                        tempList2.get(tempList2.size()-1).setFinishTime(time);
-                        tempList1.add(tempList2.get(tempList2.size()-1));
+                    time += tempList2.getRemainingBurstTime();
+                    int remain_time=tempList2.getRemainingBurstTime();
+                    tempList2.setRemainingBurstTime(0);
+                    Finallist.add(tempList2);
+                    Finallist.setRemainingBurstTime(remain_time);
+                    Finallist.setBrust_time(remain_time);
+                    if (tempList2.getRemainingBurstTime() == 0) {
+                        tempList2.setFinishTime(time);
+                        tempList1.add(tempList2) ;
                     }
                 }
             }
