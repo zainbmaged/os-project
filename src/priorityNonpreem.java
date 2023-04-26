@@ -70,3 +70,58 @@ public class NonPreemptivePriority {
         System.out.println(output);
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////
+package trail;
+
+import java.util.ArrayList;
+
+public class NonPreemptivePriority {
+    public static Output run(ArrayList<Process> processes) {
+        ArrayList<Process> executedProcesses = new ArrayList<>();
+        int currentTime = 0;
+        ArrayList<Integer> waitingTimes = new ArrayList<>();
+        ArrayList<Integer> turnaroundTimes = new ArrayList<>();
+
+        // Sort the processes based on their priority in descending order
+        processes.sort((p1, p2) -> p2.getPriority() - p1.getPriority());
+
+        for (Process process : processes) {
+            // Wait until the process arrives
+            while (currentTime < process.getArrival_time()) {
+                currentTime++;
+            }
+
+            // Record start time for the process
+            process.setStartTime(currentTime);
+
+            // Execute the process until completion
+            currentTime += process.getBrust_time();
+
+            // Record finish time for the process
+            process.setFinishTime(currentTime);
+            executedProcesses.add(process);
+
+            // Record waiting time and turnaround time for the process
+            int waitingTime = process.getStartTime() - process.getChartarrival();
+            waitingTimes.add(waitingTime);
+            int turnaroundTime = process.getFinishTime() - process.getChartarrival();
+            turnaroundTimes.add(turnaroundTime);
+        }
+
+        // Calculate average waiting time and average turnaround time
+        double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        double avgTurnaroundTime = turnaroundTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+
+        return new Output(executedProcesses, avgWaitingTime, avgTurnaroundTime);
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Process> processes = new ArrayList<>();
+        processes.add(new Process("p1", 0, 4, 3));
+        processes.add(new Process("p2", 1, 3, 2));
+
+        Output output = NonPreemptivePriority.run(processes);
+
+        System.out.println(output);
+    }
+}
