@@ -2,14 +2,14 @@ package trail;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Queue;
+import java.util.PriorityQueue;
 
 
 public class RoundRobin {
     public static Output calc(ArrayList<Process> processes,int QuantumTime ) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         int currentTime = 0;
-        Queue<Process> queue = new Queue<>(Comparator.comparingInt(Process::getArrival_time() ));
+        PriorityQueue<Process> queue = new PriorityQueue<>(Comparator.comparingInt(Process::getArrival_time() ));
         ArrayList<Integer> waitingTimes = new ArrayList<>();
         ArrayList<Integer> turnaroundTimes = new ArrayList<>();
 
