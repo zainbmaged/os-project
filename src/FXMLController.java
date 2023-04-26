@@ -1,29 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package trail;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import javafx.scene.paint.Color;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import javafx.animation.Animation;
-import static javafx.animation.Animation.Status.PAUSED;
 import static javafx.animation.Animation.Status.RUNNING;
 import static javafx.animation.Animation.Status.STOPPED;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -32,14 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -259,7 +241,11 @@ public class FXMLController implements Initializable {
     @FXML
     void dynamic(MouseEvent event) {
         if (sm.equals("live schadualing") && timeline.getStatus().equals(RUNNING)) {
-            timeline.pause();
+            timeline.stop();
+            if (timeline.getStatus().equals(STOPPED)) {
+                data.get(m).setRemainingBurstTime(1);
+            }
+           
 
             try {
                 Process r;
@@ -335,39 +321,8 @@ public class FXMLController implements Initializable {
                 case "Priority-Preemptive" -> {
                     l = change(data);
                     out = PreemptivePriority.run((ArrayList<Process>) l);
-                    if (sm.equals("live schadualing")) {
-                        Timeline tim = new Timeline(new KeyFrame(Duration.seconds(out.getProcesses().get(m).getBrust_time() + out.getProcesses().get(m).getArrival_time()), e -> {
-                            try {
-
-                                draw_live(out.getProcesses().get(m));
-
-                            } catch (IndexOutOfBoundsException i) {
-                                //m = out.getProcesses().size() - 1;
-                                // System.out.println("Exception in FXMLController -> index : " + i);
-                            }
-                            if (m < out.getProcesses().size()) {
-                                m++;
-                            }
-
-                        }));
-                        tim.setCycleCount(out.getProcesses().size());
-                        tim.play();
-                        tim.setRate(1);
-                        if (timeline.getStatus().equals(PAUSED)) {
-                            m--;
-                            tim.pause();
-
-                        }
-                        if (timeline.getStatus().equals(RUNNING)) {
-                            tim.play();
-                            tim.setCycleCount(out.getProcesses().size());
-                        }
-
-                        tim.setOnFinished(e -> {
-                            AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
-                            AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
-                        });
-                    } else {
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
                         draw(out.getProcesses());
                         AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
                         AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
@@ -391,10 +346,14 @@ public class FXMLController implements Initializable {
                     } catch (NumberFormatException e) {
                         break;
                     }
-                    Output rr = RoundRobin.Calc(change(data), q);
-                    draw(rr.getProcesses());
-                    AvgWaitingTimeLabel.setText("Avg Waiting Time: " + rr.getAvg_waiting() + "");
-                    AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + rr.getAvg_turnaround() + "");
+                    out = RoundRobin.Calc(change(data), q);
+
+                    if (sm.equals("Immediatly run all")) {//for immediate running
+                        timeline.stop();
+                        draw(out.getProcesses());
+                        AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+                        AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+                    }
                 }
                 default ->
                     System.out.println("ERROR");
@@ -484,6 +443,9 @@ public class FXMLController implements Initializable {
     public Process draw_live(Process p) {
 
         Rectangle rec = draw_chart_live(p, 0);
+        Rectangle rectangle = new Rectangle(0, 40);
+        rectangle.setFill(Color.WHITESMOKE);
+        rectangle.setStroke(null);
         //int cycle = p.getBrust_time();
         if (sm.equals("live schadualing")) {
 
@@ -493,6 +455,7 @@ public class FXMLController implements Initializable {
                     p.setRemainingBurstTime(p.getRemainingBurstTime() - 1);
                     data.set(Integer.parseInt(p.getPid()) - 1, p);
                     table.setItems(data);
+                    rectangle.setWidth((rectangle.getWidth() + 10));
                 }
 
             }));
@@ -501,9 +464,7 @@ public class FXMLController implements Initializable {
             Text text1 = new Text(40, 40, "P" + p.getPid());
             text1.setFont(Font.font("Courier", FontWeight.BOLD,
                     FontPosture.ITALIC, 8));
-            Rectangle rectangle = new Rectangle(p.getBrust_time() * 10 - 8, 40);
-            rectangle.setFill(Color.WHITESMOKE);
-            rectangle.setStroke(null);
+            rectangle.setWidth(rectangle.getWidth() - 8);
             hbox1.getChildren().addAll(text1, rectangle);
             return p;
         } else {
