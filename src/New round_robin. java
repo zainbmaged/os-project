@@ -9,8 +9,8 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 
-public class Round robin  {
-    public static Output calc(ArrayList<Process> processes, ) {
+public class RoundRobin {
+    public static Output calc(ArrayList<Process> processes,into QuantumTime ) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         int currentTime = 0;
         Queue<Process> queue = new Queue<>(Comparator.comparingInt(Process::getArrival_time() ));
@@ -33,8 +33,8 @@ public class Round robin  {
                 }
 
                 // Execute process for Quantum Time
-                currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - Quantum Time );
-                currentTime=currentTime+Quantum Time;
+                currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - QuantumTime);
+                currentTime = currentTime +QuantumTime;
 
                 // Add process back to the queue if it still has remaining burst time
                 if (currentProcess.getRemainingBurstTime() > 0) {
