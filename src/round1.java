@@ -37,8 +37,10 @@ public class RoundRobin {
           
                // add processes to ready queue
                 for (int i=0 ; i< Processes.size() ; i++)
-                     {if (Processes. get(i).getArrival_time() <= currentTime){
-                     queue.add(Processes.remove(Processes. get(i))) ;}
+                     {if (Processes.get(i).getArrival_time() <= currentTime){
+                          Process readyProcess = Processes.get(i);
+                          queue.add(readyProcess);
+                          Processes.remove(i) }
                      }
                  
                 // Add process back to the queue if it still has remaining burst time
@@ -62,8 +64,10 @@ public class RoundRobin {
                     finallist.add(currentProcess);//same burst time
                     //check for new process
                     for (int i=0 ; i< Processes.size() ; i++)
-                     {if (Processes. get(i).getArrival_time() <= currentTime){
-                     queue.add(Processes.remove(Processes. get(i))) ;}
+                     {if (Processes.get(i).getArrival_time() <= currentTime){
+                          Process readyProcess = Processes.get(i);
+                          queue.add(readyProcess);
+                          Processes.remove(i) }
                      }
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
@@ -79,8 +83,10 @@ public class RoundRobin {
                 if (!Processes.isEmpty()){
                 currentTime= Processes.get(0).getArrival_time();
                 for (int i=0 ; i< Processes.size() ; i++)
-                     {if (Processes. get(i).getArrival_time() <= currentTime){
-                     queue.add(Processes.remove(Processes. get(i))) ;}
+                     {if (Processes.get(i).getArrival_time() <= currentTime){
+                          Process readyProcess = Processes.get(i);
+                          queue.add(readyProcess);
+                          Processes.remove(i) }
                      }
                  }
             }
