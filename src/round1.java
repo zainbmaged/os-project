@@ -11,17 +11,14 @@ public class RoundRobin {
     public static Output run(ArrayList<Process> processes,int  QuantumTime) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         ArrayList<Process> finallist = new ArrayList<>();
-        int currentTime = 0;
+        int currentTime = processes.get(0).getArrival_time() ;
         PriorityQueue<Process> queue = new PriorityQueue<>();
+        queue.add(processes.remove(0));
+        
         ArrayList<Integer> waitingTimes = new ArrayList<>();
         ArrayList<Integer> turnaroundTimes = new ArrayList<>();
 
-        while (!processes.isEmpty() || !queue.isEmpty()) {
-            // Add arrived processes to the queue
-            while (!processes.isEmpty() && processes.get(0).getArrival_time() <= currentTime) {
-                queue.add(processes.remove(0));
-            }
-
+        
             // Execute process with first arrival 
             if (!queue.isEmpty()) {
                 Process currentProcess = queue.poll();
@@ -30,9 +27,9 @@ public class RoundRobin {
                 if (currentProcess.getStartTime() == 0) {
                     currentProcess.setStartTime(currentTime);
                 }
-              if(currentProcess.getBurst() >= QuantumTime) {
+              if(currentProcess.getRemainingBurstTime() >= QuantumTime) {
                 // Execute process for quantum time 
-                currentProcess.setRemainingBurstTime(currentProcess.getBurstTime() - QuantumTime );
+                currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - QuantumTime );
               //  current process.setBurstTime(QuantumTime) ;
                 currentTime = currentTime + QuantumTime;
                 finallist.add(currentProcess);
@@ -97,23 +94,5 @@ public class RoundRobin {
 
         return new Output(executedProcesses, avgWaitingTime, avgTurnaroundTime);
     }
-
-
-
-
-
-   public static void main(String[] args) {
-    ArrayList<Process> processes = new ArrayList<>();
-    processes.add(new Process("p1", 0, 4, 3));
-    processes.add(new Process("p2", 1, 3, 2));
- 
-    
-   
-    
-
-    Output output = PreemptivePriority.run(processes);
-
-    System.out.println(output);
-}
 
 }
