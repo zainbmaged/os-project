@@ -33,31 +33,37 @@ public class RoundRobin {
               if(currentProcess.getBurst() >= QuantumTime) {
                 // Execute process for quantum time 
                 currentProcess.setRemainingBurstTime(currentProcess.getBurstTime() - QuantumTime );
-                current process.setBurstTime(QuantumTime) ;
+              //  current process.setBurstTime(QuantumTime) ;
                 currentTime = currentTime + QuantumTime;
                 finallist.add(currentProcess);
           
                // add processes to ready queue
                 for (process x :processes )
-                  {if (x.getArrival_time() <= currentTime)
+                  {if (x.getArrival_time() <= currentTime){
                       queue.add(x);
+                      processes.remove(x);}
                    }
                  
                 // Add process back to the queue if it still has remaining burst time
                 if (currentProcess.getRemainingBurstTime() > 0) {
-                    queue.add(currentProcess);}
-               }
-              //burst<QuantumTime 
-              else {
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
+                    queue.add(currentProcess);
+                }else{
+                  // Record finish time for the process
+                    currentProcess.setFinishTime(currentTime);
+                    executedProcesses.add(currentProcess);
+
+                    // Record waiting time and turnaround time for the process
+                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time() - currentProcess.getChartarrival();
+                    waitingTimes.add(waitingTime);
+                    int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
+                    turnaroundTimes.add(turnaroundTime);
+                     }
+              //burst<Quantumtime 
+              }else {
+                    currentTime=currentTime+currentProcess.getRemainingBurstTime();
+                    current process.setRemainingBurstTime(0);
+                    finallist.add(currentProcess);//same burst time
+                    
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
                     executedProcesses.add(currentProcess);
@@ -68,15 +74,22 @@ public class RoundRobin {
                     int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
                     turnaroundTimes.add(turnaroundTime);
                 }
-            } else {
-                currentTime++;
+            } else {//empty queue
+                if (!processes.isEmpty()){
+                currentTime= processes.get(0).getArrival_time();
+                for (process x :processes )
+                  {if (x.getArrival_time() <= currentTime){
+                      queue.add(x);
+                      processes.remove(x);}
+                   }
+                 }
             }
         }
 
         // Set RemainingBurstTime of each process to its BurstTime
         for (Process process : executedProcesses) {
-            process.setRemainingBurstTime(process.getBrust_time());
-        }
+            process.setRemainingBurstTime(process.getBrust_time());}
+        
 
         // Calculate average waiting time and average turnaround time
         double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
