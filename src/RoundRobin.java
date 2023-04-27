@@ -85,11 +85,11 @@ public class RoundRobin {
                     }
             }
         }
-/*
+
         // Set RemainingBurstTime of each process with its BurstTime
         for (Process process : executedProcesses) {
             process.setRemainingBurstTime(process.getBrust_time());}
-        */
+        
 
         // Calculate average waiting time and average turnaround time
         double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
