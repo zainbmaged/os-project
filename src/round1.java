@@ -13,7 +13,7 @@ public class RoundRobin {
         ArrayList<Process> finallist = new ArrayList<>();
         int currentTime = Processes.get(0).getArrival_time() ;
         Queue<Process> queue = new LinkedList<>();
-        queue.add(Processes.remove(0));
+      //  queue.add(Processes.remove(0));
         
         ArrayList<Integer> waitingTimes = new ArrayList<>();
         ArrayList<Integer> turnaroundTimes = new ArrayList<>();
@@ -52,9 +52,9 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
 
                     // Record waiting time and turnaround time for the process
-                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getChartarrival();
+                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getArrival_time();
                     waitingTimes.add(waitingTime);
-                    int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
+                    int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getArrival_time();
                     turnaroundTimes.add(turnaroundTime);
                      }
               //burst<Quantumtime 
@@ -74,9 +74,9 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
 
                     // Record waiting time and turnaround time for the process
-                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getChartarrival();
+                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getArrival_time();
                     waitingTimes.add(waitingTime);
-                    int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
+                    int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getArrival_time();
                     turnaroundTimes.add(turnaroundTime);
                 }
             } else {//empty queue
