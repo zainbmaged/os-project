@@ -108,8 +108,10 @@ public class RoundRobin {
     
      public static void main(String[] args) {
     ArrayList<Process> processes = new ArrayList<>();
-    processes.add(new Process("p1", 0, 4, 3));
-    processes.add(new Process("p2", 1, 3, 2));
+    processes.add(new Process("p1", 0, 4));
+    processes.add(new Process("p2", 1, 2));
+    processes.add(new Process("p2", 2, 5));
+ 
  
     
    
