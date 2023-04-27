@@ -13,14 +13,16 @@ import java.util.ArrayList;
 public class Process {
     private String pid;
     private int brust_time;
+     private int brust_time1;
     private int Priority;
     private int arrival_time;
+    private int RemainingBurstTime;
     private int waitingTime;
     private int turnaroundTime;
     private int startTime;
     private int finishTime;
     private ArrayList<Integer> finishTime1;
-     private int RemainingTime;
+     
      private   ArrayList<Integer> startTime1; 
      private int Chartarrival;
     public Process(){
@@ -28,6 +30,14 @@ public class Process {
         this.brust_time=0;
         this.Priority=0;
         this.arrival_time=0;
+        this.RemainingBurstTime=0;
+    }
+    public Process(String processName){
+        this.pid= processName;
+        this.brust_time=0;
+        this.Priority=0;
+        this.arrival_time=0;
+        this.RemainingBurstTime=0;
     }
 
      private Process(String processName, int arrivalTime, int burstTime, int startTime, int finishTime, int priorityLevel, int waitingTime, int turnaroundTime) {
@@ -40,16 +50,18 @@ public class Process {
         this.waitingTime = waitingTime;
         this.turnaroundTime = turnaroundTime;
         this.Chartarrival = arrivalTime;
-        this.RemainingTime = burstTime;
+        this.RemainingBurstTime = burstTime;
     }
 
     public Process(String processName, int arrivalTime, int burstTime, int priorityLevel) {
-        this(processName, arrivalTime, burstTime, 0, 0, priorityLevel, 0, 0);
+        this(processName, arrivalTime, burstTime, 0, 0, priorityLevel, 0, burstTime);
     }
+    
 
     public Process(String processName, int arrivalTime, int burstTime) {
-        this(processName, arrivalTime, burstTime, 0, 0, 0, 0, 0);
+        this(processName, arrivalTime, burstTime, 0, 0, 0, 0, burstTime);
     }
+    
     public int getWaitingTime() {
         return waitingTime;
     }
@@ -108,6 +120,9 @@ public class Process {
     public int getBrust_time() {
         return brust_time;
     }
+        public int getBrust_time1() {
+        return brust_time1;
+    }
 
     public void setBrust_time(int brust_time) {
         this.brust_time = brust_time;
@@ -121,11 +136,11 @@ public class Process {
         this.Priority = Priority;
     }
    public int getRemainingBurstTime() {
-        return RemainingTime;
+        return RemainingBurstTime;
     }
 
     public void setRemainingBurstTime(int RemainingTime) {
-        this.RemainingTime = RemainingTime;
+        this.RemainingBurstTime = RemainingTime;
     }
     public void setfinishTime1(int a) {
         finishTime1=new ArrayList<Integer>();
