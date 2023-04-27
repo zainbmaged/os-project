@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import static javafx.animation.Animation.Status.PAUSED;
 import static javafx.animation.Animation.Status.RUNNING;
 import static javafx.animation.Animation.Status.STOPPED;
 import javafx.animation.KeyFrame;
@@ -186,15 +187,20 @@ public class FXMLController implements Initializable {
             }
             System.out.println(m + "");
             if (m == out.getProcesses().size()) {
+                Text text1 = new Text(40, 40, time - 1 + "");
+                text1.setFont(Font.font("Courier", FontWeight.BOLD,
+                        FontPosture.ITALIC, 8));
+                hbox1.getChildren().addAll(text1);
+//                if(!st.equals("Priority-Preemptive") &&! st.equals("Priority-nonPreemptive")){
                 AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
                 AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
+//                }
                 timeline.stop();
 
             }
 
         }));
 
-//        timeline.play();
         timeline.setCycleCount(Animation.INDEFINITE); // loop forever
 
         SM.getItems().addAll("live schadualing", "Immediatly run all");
@@ -241,22 +247,37 @@ public class FXMLController implements Initializable {
     @FXML
     void dynamic(MouseEvent event) {
         if (sm.equals("live schadualing") && timeline.getStatus().equals(RUNNING)) {
-            timeline.stop();
-            if (timeline.getStatus().equals(STOPPED)) {
-                data.get(m).setRemainingBurstTime(1);
+            timeline.pause();
+
+            if (timeline.getStatus().equals(PAUSED) &&( st.equals("SJF-Preemptive") )) {
+               
+                data.get(m).setRemainingBurstTime(0);
+                timeline.stop();
+
             }
-           
+            if (timeline.getStatus().equals(PAUSED) && !st.equals("SJF-Preemptive") && !st.equals("SJF-nonPreemptive")) {
+
+                // data.get(m).setBrust_time(data.get(m).getRemainingBurstTime());
+                data.get(m).setRemainingBurstTime(0);
+                m--;
+            }
+            if (timeline.getStatus().equals(PAUSED) && st.equals("SJF-nonPreemptive")) {
+
+                //data.get(m).setBrust_time(data.get(m).getRemainingBurstTime());
+                m--;
+
+            }
 
             try {
                 Process r;
                 if (st == "Priority-Preemptive" || st == "Priority-nonPreemptive") {
 
-                    r = new Process(processName.getText(), time,
+                    r = new Process(processName.getText(), time - 1,
                             Integer.parseInt(BurstTime.getText()), Integer.parseInt(Priority.getText()));
                     Priority.setText("");
 
                 } else {
-                    r = new Process(processName.getText(), time,
+                    r = new Process(processName.getText(), time - 1,
                             Integer.parseInt(BurstTime.getText()));
 
                 }
@@ -266,6 +287,8 @@ public class FXMLController implements Initializable {
 
                 BurstTime.setText("");
                 table.setItems(data);
+//                 AvgWaitingTimeLabel.setText("Avg Waiting Time: " + out.getAvg_waiting() + "");
+//                AvgTurnaroundTimeLabel.setText("Avg Turnaround Time:  " + out.getAvg_turnaround() + "");
 
             } catch (NumberFormatException e) {
                 System.out.println("Exception in FXMLController -> AddProcessAction() : " + e);
@@ -346,7 +369,7 @@ public class FXMLController implements Initializable {
                     } catch (NumberFormatException e) {
                         break;
                     }
-                    out = RoundRobin.Calc(change(data), q);
+                    out = RoundRobin.Calc((ArrayList<Process>) change(data), q);
 
                     if (sm.equals("Immediatly run all")) {//for immediate running
                         timeline.stop();
@@ -358,9 +381,7 @@ public class FXMLController implements Initializable {
                 default ->
                     System.out.println("ERROR");
             }
-            //  Output srtf = ShortestRemainingTime.Calc(change(data));
-//                    AvgWaitingTimeLabel.setText(srtf.getAvg_waiting() + "");
-//                    AvgTurnaroundTimeLabel.setText(srtf.getAvg_turnaround() + "");
+
         }
 
     }
@@ -429,15 +450,20 @@ public class FXMLController implements Initializable {
 
         for (Process p : process) {
             hbox.getChildren().add(draw_chart(p));
-            Text text1 = new Text(40, 40, "P" + p.getPid());
+
+            Text text1 = new Text(40, 40, p.getStartTime() + "  " + "P" + p.getPid());
             text1.setFont(Font.font("Courier", FontWeight.BOLD,
                     FontPosture.ITALIC, 8));
-            Rectangle rectangle = new Rectangle(p.getBrust_time() * 10 - 8, 40);
+            Rectangle rectangle = new Rectangle(p.getBrust_time() * 10 - 20, 40);
             rectangle.setFill(Color.WHITESMOKE);
             rectangle.setStroke(null);
             hbox1.getChildren().addAll(text1, rectangle);
 
         }
+        Text text1 = new Text(40, 40, process.get(process.size() - 1).getFinishTime() + "");
+        text1.setFont(Font.font("Courier", FontWeight.BOLD,
+                FontPosture.ITALIC, 8));
+        hbox1.getChildren().addAll(text1);
     }
 
     public Process draw_live(Process p) {
@@ -446,25 +472,35 @@ public class FXMLController implements Initializable {
         Rectangle rectangle = new Rectangle(0, 40);
         rectangle.setFill(Color.WHITESMOKE);
         rectangle.setStroke(null);
-        //int cycle = p.getBrust_time();
+
         if (sm.equals("live schadualing")) {
 
             timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), e -> {
-                if (p.getRemainingBurstTime() > 0) {
+                if (p.getRemainingBurstTime() > 0 ) {
+
                     rec.setWidth(rec.getWidth() + 10);
                     p.setRemainingBurstTime(p.getRemainingBurstTime() - 1);
                     data.set(Integer.parseInt(p.getPid()) - 1, p);
                     table.setItems(data);
                     rectangle.setWidth((rectangle.getWidth() + 10));
+
                 }
 
             }));
 
             hbox.getChildren().add(rec);
-            Text text1 = new Text(40, 40, "P" + p.getPid());
+            if (time > 1 ) {
+                time--;
+            }
+            Text text1 = new Text(40, 40, time - 1 + " " + "P" + p.getPid());
+            if (p.getStartTime() < time  ) {
+                
+                time = p.getStartTime() + 1;
+            }
+
             text1.setFont(Font.font("Courier", FontWeight.BOLD,
                     FontPosture.ITALIC, 8));
-            rectangle.setWidth(rectangle.getWidth() - 8);
+            rectangle.setWidth(rectangle.getWidth() - 18);
             hbox1.getChildren().addAll(text1, rectangle);
             return p;
         } else {
