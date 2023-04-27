@@ -44,7 +44,7 @@ public class Process {
 
     public Process(String processName, int arrivalTime, int burstTime, int priorityLevel) {
         this(processName, arrivalTime, burstTime, 0, 0, priorityLevel, 0, 0);
-      brust_time1 = brust_time;
+     
     }
 
     public Process(String processName, int arrivalTime, int burstTime) {
