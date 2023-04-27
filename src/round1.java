@@ -39,6 +39,7 @@ public class RoundRobin {
                 for (int i=0 ; i< Processes.size() ; i++)
                      {if (Processes.get(i).getArrival_time() <= currentTime){
                           Process readyProcess = Processes.get(i);
+                          readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
                           Processes.remove(i) }
                      }
@@ -59,19 +60,21 @@ public class RoundRobin {
                      }
               //burst<Quantumtime 
               }else {
-                    currentTime=currentTime+currentProcess.getRemainingBurstTime();
+                    currentTime += currentProcess.getRemainingBurstTime();
                     currentProcess.setRemainingBurstTime(0);
                     finallist.add(currentProcess);//same burst time
+                    // Record finish time for the process
+                    currentProcess.setFinishTime(currentTime);
+                    executedProcesses.add(currentProcess);
                     //check for new process
                     for (int i=0 ; i< Processes.size() ; i++)
                      {if (Processes.get(i).getArrival_time() <= currentTime){
                           Process readyProcess = Processes.get(i);
+                          readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
                           Processes.remove(i) }
                      }
-                    // Record finish time for the process
-                    currentProcess.setFinishTime(currentTime);
-                    executedProcesses.add(currentProcess);
+                    
 
                     // Record waiting time and turnaround time for the process
                     int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getArrival_time();
@@ -85,6 +88,7 @@ public class RoundRobin {
                 for (int i=0 ; i< Processes.size() ; i++)
                      {if (Processes.get(i).getArrival_time() <= currentTime){
                           Process readyProcess = Processes.get(i);
+                          readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
                           Processes.remove(i) }
                      }
