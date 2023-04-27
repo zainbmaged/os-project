@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
 
 
 public class RoundRobin {
-    public static Output run(ArrayList<Process> Processes,int  QuantumTime) {
+    public static Output calc(ArrayList<Process> Processes,int  QuantumTime) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         ArrayList<Process> finallist = new ArrayList<>();
         int currentTime = Processes.get(0).getArrival_time() ;
@@ -89,7 +89,7 @@ public class RoundRobin {
             }
         }
 
-        // Set RemainingBurstTime of each process to its BurstTime
+        // Set RemainingBurstTime of each process with its BurstTime
         for (Process process : executedProcesses) {
             process.setRemainingBurstTime(process.getBrust_time());}
         
