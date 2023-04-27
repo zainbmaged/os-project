@@ -41,7 +41,7 @@ public class RoundRobin {
                           Process readyProcess = Processes.get(i);
                           readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
-                          Processes.remove(i) }
+                          Processes.remove(i) ;}
                      }
                  
                 // Add process back to the queue if it still has remaining burst time
@@ -72,7 +72,7 @@ public class RoundRobin {
                           Process readyProcess = Processes.get(i);
                           readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
-                          Processes.remove(i) }
+                          Processes.remove(i) ;}
                      }
                     
 
@@ -90,7 +90,7 @@ public class RoundRobin {
                           Process readyProcess = Processes.get(i);
                           readyProcess.setRemainingBurstTime(readyProcess.getBrust_time());
                           queue.add(readyProcess);
-                          Processes.remove(i) }
+                          Processes.remove(i) ;}
                      }
                  }
             }
