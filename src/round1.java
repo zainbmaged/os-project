@@ -31,8 +31,8 @@ public class RoundRobin {
               if(currentProcess.getRemainingBurstTime() >= QuantumTime) {
                 // Execute process for quantum time 
                 currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - QuantumTime );
-              //  current process.setBurstTime(QuantumTime) ;
-                currentTime = currentTime + QuantumTime;
+                currentTime += QuantumTime;
+                currentprocess.setBurst_Time(QuantumTime) ;
                 finallist.add(currentProcess);
           
                // add processes to ready queue
@@ -51,7 +51,7 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
 
                     // Record waiting time and turnaround time for the process
-                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time() - currentProcess.getChartarrival();
+                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getChartarrival();
                     waitingTimes.add(waitingTime);
                     int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
                     turnaroundTimes.add(turnaroundTime);
@@ -72,7 +72,7 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
 
                     // Record waiting time and turnaround time for the process
-                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time() - currentProcess.getChartarrival();
+                    int waitingTime = currentProcess.getFinishTime() - currentProcess.getBrust_time1() - currentProcess.getChartarrival();
                     waitingTimes.add(waitingTime);
                     int turnaroundTime = currentProcess.getFinishTime() - currentProcess.getChartarrival();
                     turnaroundTimes.add(turnaroundTime);
@@ -98,7 +98,7 @@ public class RoundRobin {
         double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
         double avgTurnaroundTime = turnaroundTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
 
-        return new Output(executedProcesses, avgWaitingTime, avgTurnaroundTime);
+        return new Output(finallist, avgWaitingTime, avgTurnaroundTime);
     }
 
 }
