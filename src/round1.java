@@ -8,16 +8,17 @@ import java.util.PriorityQueue;
 
 
 public class RoundRobin {
-    public static Output run(ArrayList<Process> processes,int  QuantumTime) {
+    public static Output run(ArrayList<Process> Processes,int  QuantumTime) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         ArrayList<Process> finallist = new ArrayList<>();
-        int currentTime = processes.get(0).getArrival_time() ;
+        int currentTime = Processes.get(0).getArrival_time() ;
         PriorityQueue<Process> queue = new PriorityQueue<>();
-        queue.add(processes.remove(0));
+        queue.add(Processes.remove(0));
         
         ArrayList<Integer> waitingTimes = new ArrayList<>();
         ArrayList<Integer> turnaroundTimes = new ArrayList<>();
-
+        
+       while (!Processes.isEmpty() || !queue.isEmpty()) { 
         
             // Execute process with first arrival 
             if (!queue.isEmpty()) {
@@ -35,10 +36,10 @@ public class RoundRobin {
                 finallist.add(currentProcess);
           
                // add processes to ready queue
-                for (process x :processes )
+                for (Process x :Processes )
                   {if (x.getArrival_time() <= currentTime){
                       queue.add(x);
-                      processes.remove(x);}
+                      Processes.remove(x);}
                    }
                  
                 // Add process back to the queue if it still has remaining burst time
@@ -58,9 +59,14 @@ public class RoundRobin {
               //burst<Quantumtime 
               }else {
                     currentTime=currentTime+currentProcess.getRemainingBurstTime();
-                    current process.setRemainingBurstTime(0);
+                    currentProcess.setRemainingBurstTime(0);
                     finallist.add(currentProcess);//same burst time
-                    
+                    //check for new process
+                    for (Process x :Processes )
+                  {if (x.getArrival_time() <= currentTime){
+                      queue.add(x);
+                      Processes.remove(x);}
+                   }
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
                     executedProcesses.add(currentProcess);
@@ -72,12 +78,12 @@ public class RoundRobin {
                     turnaroundTimes.add(turnaroundTime);
                 }
             } else {//empty queue
-                if (!processes.isEmpty()){
-                currentTime= processes.get(0).getArrival_time();
-                for (process x :processes )
+                if (!Processes.isEmpty()){
+                currentTime= Processes.get(0).getArrival_time();
+                for (Process x :Processes )
                   {if (x.getArrival_time() <= currentTime){
                       queue.add(x);
-                      processes.remove(x);}
+                      Processes.remove(x);}
                    }
                  }
             }
