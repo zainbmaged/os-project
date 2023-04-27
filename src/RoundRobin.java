@@ -59,7 +59,9 @@ public class RoundRobin {
               }else {
                     currentTime += currentProcess.getRemainingBurstTime();
                     currentProcess.setRemainingBurstTime(0);
+                    currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
                     finallist.add(currentProcess);//same burst time
+                    
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
                     executedProcesses.add(currentProcess);
