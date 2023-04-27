@@ -108,22 +108,24 @@ public class RoundRobin {
         return new Output(finallist, avgWaitingTime, avgTurnaroundTime);
     }
 
+    public static void main(String[] args) {
+        ArrayList<Process> processes = new ArrayList<>();
 
-    
-     public static void main(String[] args) {
-    ArrayList<Process> processes = new ArrayList<>();
-    processes.add(new Process("p1", 0, 4));
-    processes.add(new Process("p2", 1, 2));
-    processes.add(new Process("p2", 2, 5));
- 
- 
-    
-   
-    
+        processes.add(new Process("p1", 0, 4));
+        processes.add(new Process("p2", 1, 2));
+        processes.add(new Process("p3", 2, 5));
 
-    Output output = RoundRobin.calc(processes,2);
+        Output output = RoundRobin.calc(processes, 2);
 
-    System.out.println(output);
-}
+        System.out.println("Final list of processes:");
+        for (Process process : output.getProcesses()) {
+            System.out.println(process.getPid());
+        }
+        System.out.println("Average waiting time: " + output.getAvg_waiting());
+        System.out.println("Average turnaround time: " + output.getAvg_turnaround());
+        
+    }
+    
+     
 }
                 
