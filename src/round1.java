@@ -36,10 +36,10 @@ public class RoundRobin {
                 finallist.add(currentProcess);
           
                // add processes to ready queue
-                for (Process x :Processes )
-                  {if (x.getArrival_time() <= currentTime){
-                      queue.add(Processes.remove(x)); }
-                   }
+                for (int i=0 ; i< Processes.size() ; i++)
+                     {if (Processes. get(i).getArrival_time() <= currentTime){
+                     queue.add(Processes.remove(Processes. get(i))) ;}
+                     }
                  
                 // Add process back to the queue if it still has remaining burst time
                 if (currentProcess.getRemainingBurstTime() > 0) {
@@ -61,9 +61,9 @@ public class RoundRobin {
                     currentProcess.setRemainingBurstTime(0);
                     finallist.add(currentProcess);//same burst time
                     //check for new process
-                    for (Process x1 :Processes )
-                     {if (x1.getArrival_time() <= currentTime){
-                     queue.add(Processes.remove(x1)) ;}
+                    for (int i=0 ; i< Processes.size() ; i++)
+                     {if (Processes. get(i).getArrival_time() <= currentTime){
+                     queue.add(Processes.remove(Processes. get(i))) ;}
                      }
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
@@ -78,10 +78,10 @@ public class RoundRobin {
             } else {//empty queue
                 if (!Processes.isEmpty()){
                 currentTime= Processes.get(0).getArrival_time();
-                for (Process x2 :Processes )
-                  {if (x2.getArrival_time() <= currentTime){
-                     queue.add(Processes.remove(x2)); }
-                   }
+                for (int i=0 ; i< Processes.size() ; i++)
+                     {if (Processes. get(i).getArrival_time() <= currentTime){
+                     queue.add(Processes.remove(Processes. get(i))) ;}
+                     }
                  }
             }
         }
