@@ -43,8 +43,10 @@ public class RoundRobin {
                  
                 // Add process back to the queue if it still has remaining burst time
                 if (currentProcess.getRemainingBurstTime() > 0) {
-                    queue.add(currentProcess);
-                }else{
+                   if (currentProcess.getRemainingBurstTime() <  QuntamTime) {
+                       currentProcess.setBrust_time(currentProcess.getRemainingBurstTime())} 
+                    queue.add(currentProcess);} 
+                else{
                   // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
                     executedProcesses.add(currentProcess);
@@ -86,10 +88,10 @@ public class RoundRobin {
             }
         }
 
-        // Set RemainingBurstTime of each process with its BurstTime
-        for (Process process : executedProcesses) {
-            process.setRemainingBurstTime(process.getBrust_time1());}
-        
+     /*   // Set RemainingBurstTime of each process with its BurstTime
+        for (Process process : finallist) {
+            process.setRemainingBurstTime(process.getBrust_time());}
+        */
 
         // Calculate average waiting time and average turnaround time
         double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
