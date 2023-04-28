@@ -84,10 +84,10 @@ public class RoundRobin {
                     }
             }
         }
-/*
+
         // Set RemainingBurstTime of each process with its BurstTime
         for (Process process : executedProcesses) {
-            process.setRemainingBurstTime(process.getBrust_time1());}*/
+            process.setRemainingBurstTime(process.getBrust_time());}
         
 
         // Calculate average waiting time and average turnaround time
