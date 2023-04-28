@@ -47,7 +47,7 @@ public class RoundRobin {
                 if (currentProcess.getRemainingBurstTime() > 0) {
                    if (currentProcess.getRemainingBurstTime() <  QuntamTime) {
                         Process tempProcess = currentProcess;
-                        tempProcess.setBrust_time(currentProcess.getRemainingBurstTime());
+                        tempProcess.setBrust_time(tempProcess.getRemainingBurstTime());
                         queue.add(tempProcess) ;  } 
                     else 
                     {queue.add(currentProcess);} 
