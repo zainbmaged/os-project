@@ -58,7 +58,7 @@ public class RoundRobin {
               //burst<Quantumtime 
               }else {
                     currentTime += currentProcess.getRemainingBurstTime();
-                    currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
+                  //  currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
                     currentProcess.setRemainingBurstTime(0);
                     finallist.add(currentProcess);//same burst time
                     // Record finish time for the process
@@ -87,7 +87,7 @@ public class RoundRobin {
 
         // Set RemainingBurstTime of each process with its BurstTime
         for (Process process : executedProcesses) {
-            process.setRemainingBurstTime(process.getBrust_time());}
+            process.setRemainingBurstTime(process.getBrust_time1());}
         
 
         // Calculate average waiting time and average turnaround time
