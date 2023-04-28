@@ -37,7 +37,7 @@ public class RoundRobin {
           
                // add processes to ready queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                  Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
+                  Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
                   queue.add(Processes.remove(0));
              }
                  
@@ -58,7 +58,7 @@ public class RoundRobin {
               //burst<Quantumtime 
               }else {
                     currentTime += currentProcess.getRemainingBurstTime();
-                   //new** currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
+                    currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
                     currentProcess.setRemainingBurstTime(0);
                     finallist.add(currentProcess);//same burst time
                     // Record finish time for the process
@@ -66,7 +66,7 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
                     //check for new process
                     while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                    Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
+                    Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
                     queue.add(Processes.remove(0));
                        }
                     
@@ -79,16 +79,16 @@ public class RoundRobin {
                 }
             } else {//empty queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
+                Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
                 queue.add(Processes.remove(0));
                     }
             }
         }
-/*
+
         // Set RemainingBurstTime of each process with its BurstTime
         for (Process process : executedProcesses) {
-            process.setRemainingBurstTime(process.getBrust_time());}
-        */
+            process.setRemainingBurstTime(process.getBrust_time1());}
+        
 
         // Calculate average waiting time and average turnaround time
         double avgWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).average().orElse(0.0);
@@ -97,23 +97,5 @@ public class RoundRobin {
         return new Output(finallist, avgWaitingTime, avgTurnaroundTime);
     }
 
-    public static void main(String[] args) {
-        ArrayList<Process> processes = new ArrayList<>();
-
-        processes.add(new Process("p1", 0, 5));
-        processes.add(new Process("p2", 1, 3));
-        processes.add(new Process("p3", 2, 1));
-        processes.add(new Process("p4", 3, 2));
-        processes.add(new Process("p5", 4, 3));
-
-        Output output = RoundRobin.calc(processes, 2);
-
-        System.out.println("Final list of processes:");
-        for (Process process : output.getProcesses()) {
-            System.out.println(process.getPid());
-        }
-        System.out.println("Average waiting time: " + output.getAvg_waiting());
-        System.out.println("Average turnaround time: " + output.getAvg_turnaround());
-        
-    }
+    
 }
