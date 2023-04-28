@@ -11,6 +11,7 @@ public class RoundRobin {
     public static Output calc(ArrayList<Process> Processes,int  QuantumTime) {
         ArrayList<Process> executedProcesses = new ArrayList<>();
         ArrayList<Process> finallist = new ArrayList<>();
+        int i=0;
         int currentTime = Processes.get(0).getArrival_time() ;
         Queue<Process> queue = new LinkedList<>();
       //  queue.add(Processes.remove(0));
@@ -38,14 +39,19 @@ public class RoundRobin {
                // add processes to ready queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
                   Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
+             
                   queue.add(Processes.remove(0));
              }
                  
                 // Add process back to the queue if it still has remaining burst time
                 if (currentProcess.getRemainingBurstTime() > 0) {
                    if (currentProcess.getRemainingBurstTime() <  QuntamTime) {
-                       currentProcess.setBrust_time(currentProcess.getRemainingBurstTime())} 
-                    queue.add(currentProcess);} 
+                        Process tempProcess = currentProcess;
+                        tempProcess.setBrust_time(currentProcess.getRemainingBurstTime());
+                        queue.add(tempProcess) ;  } 
+                    else 
+                    {queue.add(currentProcess);} 
+                     } 
                 else{
                   // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
