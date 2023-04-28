@@ -37,7 +37,7 @@ public class RoundRobin {
           
                // add processes to ready queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                  Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
+                  Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
                   queue.add(Processes.remove(0));
              }
                  
@@ -66,7 +66,7 @@ public class RoundRobin {
                     executedProcesses.add(currentProcess);
                     //check for new process
                     while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                    Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
+                    Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
                     queue.add(Processes.remove(0));
                        }
                     
@@ -79,7 +79,7 @@ public class RoundRobin {
                 }
             } else {//empty queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
-                Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time1());
+                Processes.get(0).setRemainingBurstTime( Processes.get(0).getBrust_time());
                 queue.add(Processes.remove(0));
                     }
             }
