@@ -45,9 +45,11 @@ public class RoundRobin {
                  
                 // Add process back to the queue if it still has remaining burst time
                 if ((currentProcess.getRemainingBurstTime() > 0)   &&  (currentProcess.getRemainingBurstTime() <  QuntamTime)) {
-                       }
+                      Process temp =new Process;
+                      temp.setRemainingBurstTime(currentProcess.getRemainingBurstTime());
+                      temp.setBrust_time(getRemainingBurstTime());}
                 else if ((currentProcess.getRemainingBurstTime() > 0)   &&  !(currentProcess.getRemainingBurstTime() <  QuntamTime)) {
-                        queue.add(currentprocess);   }
+                        queue.add(currentProcess);   }
                 else{
                   // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
