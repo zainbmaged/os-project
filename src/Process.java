@@ -51,21 +51,22 @@ public class Process {
         this.turnaroundTime = turnaroundTime;
         this.Chartarrival = arrivalTime;
         this.RemainingBurstTime = burstTime;
+        brust_time1 = burstTime ;
+        
     }
 
     public Process(String processName, int arrivalTime, int burstTime, int priorityLevel) {
         this(processName, arrivalTime, burstTime, 0, 0, priorityLevel, 0, burstTime);
+        
     }
     
 
     public Process(String processName, int arrivalTime, int burstTime) {
         this(processName, arrivalTime, burstTime, 0, 0, 0, 0, burstTime);
+        brust_time1 = burstTime ;
     }
     
-    public Process(String processName, int arrivalTime, int burstTime , int bursttime1) {
-        this(processName, arrivalTime, burstTime, 0, 0, 0, 0, burstTime);
-        this.brust_time1 = burstTime1;
-    }
+    
     
     public int getWaitingTime() {
         return waitingTime;
