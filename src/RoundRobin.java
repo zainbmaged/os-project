@@ -34,8 +34,8 @@ public class RoundRobin {
                 currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - QuantumTime );
                 currentTime += QuantumTime;
                 currentProcess.setBrust_time(QuantumTime) ;
-               // finallist.add(new Process(currentProcess.getPid(), currentProcess.getArrival_time(), currentProcess.getBrust_time()));
-                finallist.add(currentProcess);
+                finallist.add(new Process(currentProcess.getPid(), currentProcess.getArrival_time(), currentProcess.getBrust_time()));
+               // finallist.add(currentProcess);
           
                // add processes to ready queue
                 while (!Processes.isEmpty() && Processes.get(0).getArrival_time() <= currentTime) {
@@ -45,12 +45,7 @@ public class RoundRobin {
              }
                  
                 // Add process back to the queue if it still has remaining burst time
-                if ((currentProcess.getRemainingBurstTime() > 0)   &&  (currentProcess.getRemainingBurstTime() <  QuntamTime)) {
-                      Process temp =new Process;
-                      temp.setRemainingBurstTime(currentProcess.getRemainingBurstTime());
-                      temp.setBrust_time(getRemainingBurstTime());
-                       temp.setPid(currentProcess. getPid());}
-                else if ((currentProcess.getRemainingBurstTime() > 0)   &&  !(currentProcess.getRemainingBurstTime() <  QuntamTime)) {
+                if ((currentProcess.getRemainingBurstTime() > 0)   {
                         queue.add(currentProcess);   }
                 else{
                   // Record finish time for the process
@@ -66,9 +61,10 @@ public class RoundRobin {
               //burst<Quantumtime 
               }else {
                     currentTime += currentProcess.getRemainingBurstTime();
+                    currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
                     currentProcess.setRemainingBurstTime(0);
-                    //currentProcess.setBrust_time(currentProcess.getRemainingBurstTime());
-                    finallist.add(currentProcess);//same burst time
+                    finallist.add(new Process(currentProcess.getPid(), currentProcess.getArrival_time(), currentProcess.getBrust_time()));
+                 //   finallist.add(currentProcess);//same burst time
                     
                     // Record finish time for the process
                     currentProcess.setFinishTime(currentTime);
