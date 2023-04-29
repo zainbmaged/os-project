@@ -34,6 +34,7 @@ public class RoundRobin {
                 currentProcess.setRemainingBurstTime(currentProcess.getRemainingBurstTime() - QuantumTime );
                 currentTime += QuantumTime;
                 currentProcess.setBrust_time(QuantumTime) ;
+               // finallist.add(new Process(currentProcess.getPid(), currentProcess.getArrival_time(), currentProcess.getBrust_time()));
                 finallist.add(currentProcess);
           
                // add processes to ready queue
