@@ -62,6 +62,11 @@ public class Process {
         this(processName, arrivalTime, burstTime, 0, 0, 0, 0, burstTime);
     }
     
+    public Process(String processName, int arrivalTime, int burstTime , int bursttime1) {
+        this(processName, arrivalTime, burstTime, 0, 0, 0, 0, burstTime);
+        this.brust_time1 = burstTime1;
+    }
+    
     public int getWaitingTime() {
         return waitingTime;
     }
@@ -126,6 +131,9 @@ public class Process {
 
     public void setBrust_time(int brust_time) {
         this.brust_time = brust_time;
+    }
+     public void setBrust_time1(int brust_time1) {
+        this.brust_time1 = brust_time1;
     }
 
     public int getPriority() {
